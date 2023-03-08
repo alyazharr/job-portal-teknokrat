@@ -46,7 +46,7 @@ sonarqube-check:
       -D"sonar.sources=."
       -D"sonar.host.url=$SONAR_HOST_URL"
       -D"sonar.login=$SONAR_TOKEN"
-      -D"sonar.python.coverage.reportPath=./coverage.xml"
+      -D"sonar.python.coverage.reportPaths=./coverage.xml"
   allow_failure: true
   only:
     - master
