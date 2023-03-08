@@ -23,6 +23,8 @@ Test:
       - coverage.xml
   only:
     - master
+    - staging
+    - merge_requests
 
 sonarqube-check:
   stage: sonarqube
@@ -45,6 +47,8 @@ sonarqube-check:
   allow_failure: true
   only:
     - master
+    - staging
+    - merge_requests
 
 Deployment:
   image: ruby:latest
@@ -58,3 +62,16 @@ Deployment:
     url: $HEROKU_APP_HOST
   only:
     - master
+
+Dev Deployment:
+  image: ruby:latest
+  stage: deploy
+  before_script:
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=$HEROKU_APPDEV_NAME --api-key=$HEROKU_API_KEY
+  environment:
+    name: staging
+    url: $HEROKU_APPDEV_HOST
+  only:
+    - staging
