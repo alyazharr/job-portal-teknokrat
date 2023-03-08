@@ -24,14 +24,14 @@ SECRET_KEY = "django-insecure-+5jenqt^b@78zpr3o47exk25-cv(^d0lyz5roiz)d_9&*-46=i
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-DEBUG = True
 
 HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME', '')
 
 PRODUCTION = True if HEROKU_APP_NAME  else False
 
-ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.herokuapp.com'] if PRODUCTION else ["*"]
+DEBUG = not PRODUCTION
 
+ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.herokuapp.com'] if PRODUCTION else ["*"]
 
 # Application definition
 
@@ -79,13 +79,19 @@ WSGI_APPLICATION = "jobseeker.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+DATABASE_PRODUCTION = {
+    "ENGINE" : "django.db.backends.sqlite3",
+    "NAME" : BASE_DIR / "db.sqlite3"
+}
+
+DATABASE_DEVELOPMENT = {
+    "ENGINE": "django.db.backends.mysql",
+    "NAME" : "teknokrat",
+    "USER" : "root",
+}
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        # "NAME": BASE_DIR / "db.sqlite3",
-        "NAME" : "teknokrat",
-        "USER" : "root",
-    }
+    "default": DATABASE_DEVELOPMENT if not PRODUCTION else DATABASE_PRODUCTION 
 }
 
 
