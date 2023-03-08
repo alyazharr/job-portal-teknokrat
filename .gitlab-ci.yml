@@ -28,6 +28,8 @@ Test:
 
 sonarqube-check:
   stage: sonarqube
+  dependencies:
+    - Test
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
