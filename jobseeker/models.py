@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import UsersManager
+from django.utils.translation import gettext_lazy as _
 
 
 class CV(models.Model):
@@ -61,17 +62,28 @@ class Lamar(models.Model):
         db_table = 'lamar'
 
 
+
+
 class Lowongan(models.Model):
+    class StatusLowongan(models.TextChoices):
+        UNVERIFIED = "Belum terverifikasi", _("Belum terverifikasi")
+        VERIFIED = "Sudah terverifikasi", _("Sudah terverifikasi")
+        REJECTED = "Ditolak", _("Sudah Ditolak")
+        OPEN = "Buka", _("Buka")
+        CLOSED = "Tutup", _("Tutup")
+
     id = models.BigAutoField(primary_key=True)
     users_id = models.PositiveBigIntegerField()
     posisi = models.CharField(max_length=255)
     gaji = models.CharField(max_length=255)
     lama_pengalaman = models.CharField(max_length=255)
-    deskripsi = models.TextField()
-    status = models.CharField(max_length=255)
+    deskripsi = models.TextField(null=True)
+    requirements = models.JSONField(null=True)
+    status = models.CharField(max_length=255,choices=StatusLowongan.choices,default=StatusLowongan.UNVERIFIED)
+    buka_lowongan = models.DateField(null=True)
     batas_pengumpulan = models.DateField()
-    created_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True, auto_now=True)
+    updated_at = models.DateTimeField(blank=True, null=True,auto_now=True)
 
     class Meta:
         db_table = 'lowongan'
