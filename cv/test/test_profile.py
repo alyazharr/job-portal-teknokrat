@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from jobseeker.models import CV, Users
 from django.urls import reverse
 from ..views import profile
+from django.http import HttpResponse
 
 
 class ProfileTestCase(TestCase):
@@ -13,6 +14,8 @@ class ProfileTestCase(TestCase):
         created_user = Users.objects.create(
             username="username",
             password="password",
+            email="emailku@mail.com",
+            image="default.png",
             npm=1,
             prodi_id=1,
             role_id=1
@@ -60,7 +63,14 @@ class ProfileTestCase(TestCase):
         client.login(username="username",password="password")
         url = reverse(CV_PROFILE)
         response = client.get(url)
-        self.assertTemplateUsed(response, 'cv/profile.html')
+        self.assertTemplateUsed(response, 'profile.html')
+
+    def test_profile_view_should_return_http_response(self):
+        client = Client()
+        client.login(username="username",password="password")
+        url = reverse(CV_PROFILE)
+        response = client.get(url)
+        self.assertIsInstance(response, HttpResponse)
 
 
 
