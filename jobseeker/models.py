@@ -5,7 +5,8 @@ from django.conf import settings
 
 
 class CV(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    id = models.BigAutoField(primary_key=True)
+    users_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     profile = models.TextField()
     posisi = models.CharField(max_length=255)
     instansi = models.TextField()

@@ -18,7 +18,7 @@ class ProfileTestCase(TestCase):
             role_id=1
         )
         CV.objects.create(
-            user=created_user,
+            users_id=created_user,
             profile="profile",
             posisi = "manager",
             instansi = "PT. CBA",

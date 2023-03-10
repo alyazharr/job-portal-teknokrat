@@ -4,7 +4,3 @@ from django.shortcuts import render
 
 def profile(request):
     return None
-
-
-def edit_profile(request):
-    return None
