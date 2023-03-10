@@ -1,0 +1,17 @@
+html, body {
+    margin:0;
+    padding:0;
+}
+
+.base-red {
+    background-color: #D02E4A;
+}
+
+.nav-link {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    color: #FFFFFF;
+}

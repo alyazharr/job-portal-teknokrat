@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 class CustomBackend(BaseBackend):
     def authenticate(self,request, **kwargs):
-        UserModel = get_user_model()
+        user_model = get_user_model()
         """
         Authenticate user from request argument based on
         username and password, return user if it is valid
@@ -19,19 +19,19 @@ class CustomBackend(BaseBackend):
         password = password or kwargs.pop("password")
 
         try:
-            user = UserModel._default_manager.get_by_natural_key(username)
-        except UserModel.DoesNotExist:
+            user = user_model._default_manager.get_by_natural_key(username)
+        except user_model.DoesNotExist:
             # Run the default password hasher once to reduce the timing
             # difference between an existing and a nonexistent user (#20760).
-            UserModel().set_password(password)
+            user_model().set_password(password)
         else:
             if user.check_password(password) :
                 return user
 
     def get_user(self, user_id):
-        UserModel = get_user_model()
+        user_model = get_user_model()
         try:
-            user = UserModel._default_manager.get(pk=user_id)
-        except UserModel.DoesNotExist:
+            user = user_model._default_manager.get(pk=user_id)
+        except user_model.DoesNotExist:
             return None
         return user

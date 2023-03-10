@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Profile</title>
+{% endblock meta %}
+
+{% block content %}
+
+{% if request.user.image == 'default.png' %}
+<img src="{% static '/images/default.png' %}" alt="image">
+{% else %}
+<p>No Image</p>
+{% endif %}
+<p>{{ cv.profile }}</p>
+
+{% endblock content %}
