@@ -7,11 +7,74 @@
 
 {% block content %}
 
-{% if request.user.image == 'default.png' %}
-<img src="{% static '/images/default.png' %}" alt="image">
-{% else %}
-<p>No Image</p>
-{% endif %}
-<p>{{ cv.profile }}</p>
-
+<div class="d-flex flex-wrap justify-content-center p-5" style="margin: 0 2.5rem 0 2.5rem">
+    <div class="mt-5">
+        {% if request.user.image == 'default.png' %}
+        <img src="{% static '/images/default.png' %}" style="width:13rem" alt="image">
+        {% else %}
+        <p>No Image</p>
+        {% endif %}
+    </div>
+    <div class="flex-fill" style="min-width: 50%;">
+        <div class="d-flex flex-column" style="margin: 2.5rem">
+            <div class="header font-base-red">{{ request.user.username }}</div>
+            <div class="flex-fill segment-card mt-5 p-4">
+                <h5 class="subheader-1">Tentang Saya</h5>
+                <p>{{ cv.profile }}</p>
+            </div>
+            <div class="flex-fill segment-card mt-3 p-4">
+                <div class="d-flex flex-wrap">
+                    <div class="flex-fill">
+                        <div class="subheader-2">
+                            NPM
+                        </div>
+                        <div>
+                            {{ request.user.npm }}
+                        </div>
+                    </div>
+                    <div class="flex-fill">
+                        <div class="subheader-2">
+                            Pendidikan Terakhir
+                        </div>
+                        <div>
+                            {{ cv.keterangan_pendidikan }}
+                        </div>
+                    </div>
+                    <div class="flex-fill">
+                        <div class="subheader-2">
+                            Pekerjaan
+                        </div>
+                        <div>
+                            {{ cv.keterangan_posisi }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="segment-card mt-3 p-4" style="width: 60%;">
+                <div class="d-flex flex-wrap">
+                    <div class="flex-fill">
+                        <div class="subheader-2">
+                            Email
+                        </div>
+                        <div>
+                            {{ request.user.email }}
+                        </div>
+                    </div>
+                    <div class="flex-fill">
+                        <div class="subheader-2">
+                            Telepon
+                        </div>
+                        {{ request.user.no_telp }}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a href="" class="btn btn-primary bg-base-purple mt-3">
+                        <img src="{% static '/images/mail_icon.png' %}" style="padding: 0 0.5rem 0 0.5rem" alt="edit">
+                        <span class="subheader-2">Lihat CV</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
