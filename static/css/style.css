@@ -10,7 +10,6 @@ html, body {
 .bg-img {
     background-size: cover;
     background-image: url("../images/main_background.png");
-    background-color: rgba(217, 217, 217, 0.3);
 }
 
 .bg-base-red {
