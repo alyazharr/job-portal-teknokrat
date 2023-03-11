@@ -1,15 +1,13 @@
 from django.test import TestCase, Client
 from jobseeker.models import CV, Users
 from django.urls import reverse
-from ..views import profile
 from django.http import HttpResponse
 
 
 class ProfileTestCase(TestCase):
     
     def setUp(self):
-        global CV_PROFILE 
-        CV_PROFILE = "cv:profile"
+        self.CV_PROFILE = "cv:profile"
 
         created_user = Users.objects.create(
             username="username",
@@ -40,20 +38,20 @@ class ProfileTestCase(TestCase):
         
         client = Client()
         client.login(username="username",password="password")
-        url = reverse(CV_PROFILE)
+        url = reverse(self.CV_PROFILE)
         response = client.get(url)
         self.assertEquals(response.status_code , 200)
 
     def test_profile_if_user_is_not_logged_in_should_redirect_to_login(self):
         client = Client()
-        url = reverse(CV_PROFILE)
+        url = reverse(self.CV_PROFILE)
         response = client.get(url)
         self.assertEquals(response.status_code, 302)
 
     def test_profile_on_render_should_return_CV(self):
         client = Client()
         client.login(username="username",password="password")
-        url = reverse(CV_PROFILE)
+        url = reverse(self.CV_PROFILE)
         response = client.get(url)
         self.assertEquals(response.context['cv'].profile, "profile")
 
@@ -61,14 +59,14 @@ class ProfileTestCase(TestCase):
         client = Client()
 
         client.login(username="username",password="password")
-        url = reverse(CV_PROFILE)
+        url = reverse(self.CV_PROFILE)
         response = client.get(url)
         self.assertTemplateUsed(response, 'profile.html')
 
     def test_profile_view_should_return_http_response(self):
         client = Client()
         client.login(username="username",password="password")
-        url = reverse(CV_PROFILE)
+        url = reverse(self.CV_PROFILE)
         response = client.get(url)
         self.assertIsInstance(response, HttpResponse)
 
