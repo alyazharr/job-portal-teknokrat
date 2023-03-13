@@ -21,7 +21,7 @@
         </ul>
     </div>
     {% if request.user.is_authenticated %}
-    <a href="" class="nav-link" style="padding: 20px;">{{request.user.username}}</a>
+    <a href="{% url 'cv:profile' %}" class="nav-link" style="padding: 20px;">{{request.user.username}}</a>
 
     <a href="" class="nav-link" style="padding: 20px;">Logout</a>
     {% else %}

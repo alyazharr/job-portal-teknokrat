@@ -18,6 +18,7 @@
     <div class="flex-fill" style="min-width: 40%;">
         <div class="d-flex flex-column" style="margin: 2.5rem">
             <div class="header font-base-red">{{ request.user.name }}</div>
+            {% if request.user.role_id == 1 %}
             <div class="flex-fill segment-card mt-5 p-4">
                 <h5 class="subheader-1">Tentang Saya</h5>
                 <p>{{ cv.profile }}</p>
@@ -50,6 +51,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             <div class="segment-card mt-3 p-4" style="width: 60%;">
                 <div class="d-flex flex-wrap">
                     <div class="flex-fill">
@@ -68,12 +70,14 @@
                     </div>
                 </div>
             </div>
+            {% if request.user.role_id == 1 %}
             <div>
                 <a href="" class="btn btn-primary bg-base-purple mt-3">
                         <img src="{% static '/images/mail_icon.png' %}" style="padding: 0 0.5rem 0 0.5rem" alt="edit">
                         <span class="subheader-2">Lihat CV</span>
                 </a>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

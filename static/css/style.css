@@ -41,6 +41,13 @@ html, body {
     color: #FFFFFF;
 }
 
+.nav-link:hover {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    color: #dddddd;
+}
+
 .header {
     font-size: 52px;
     font-weight: 600;
