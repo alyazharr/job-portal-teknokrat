@@ -1,0 +1,65 @@
+html, body {
+    margin:0;
+    padding:0;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-size: 16px;
+    
+}
+
+.bg-img {
+    background-size: cover;
+    background-image: url("../images/main_background.png");
+}
+
+.bg-base-red {
+    background-color: #D02E4A;
+}
+
+.bg-base-purple {
+    background-color: #3633C6;
+}
+
+.bg-base-purple:hover {
+    background-color: #32308b;
+    
+}
+.font-base-red {
+    color: #D02E4A;
+}
+
+.segment-card{
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    border: 1px solid #D1D5DB;
+}
+
+.nav-link {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    color: #FFFFFF;
+}
+
+.nav-link:hover {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    color: #dddddd;
+}
+
+.header {
+    font-size: 52px;
+    font-weight: 600;
+}
+
+.subheader-1 {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.subheader-2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+

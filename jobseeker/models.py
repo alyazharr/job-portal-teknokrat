@@ -2,11 +2,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import UsersManager
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 
 class CV(models.Model):
     id = models.BigAutoField(primary_key=True)
-    users_id = models.PositiveBigIntegerField()
+    users_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     profile = models.TextField()
     posisi = models.CharField(max_length=255)
     instansi = models.TextField()
