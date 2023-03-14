@@ -8,6 +8,12 @@ import json
 global DASHBOARD
 DASHBOARD = '/dashboard-lowongan-pekerjaan/'
 
+global LOWONGAN_DIBUKA
+LOWONGAN_DIBUKA = '/lowongan-dibuka/'
+
+global LOWONGAN_DITUTUP
+LOWONGAN_DITUTUP = '/lowongan-ditutup/'
+
 global LOGIN
 LOGIN = 'homepage:login'
 
@@ -55,11 +61,11 @@ class DashboardPekerjaanNotLoggedIn(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_lowongan_dibuka(self):
-        response = Client().get('/lowongan-dibuka/')
+        response = Client().get(LOWONGAN_DIBUKA)
         self.assertEqual(response.status_code, 302)
 
     def test_lowongan_ditutup(self):
-        response = Client().get('/lowongan-ditutup/')
+        response = Client().get(LOWONGAN_DITUTUP)
         self.assertEqual(response.status_code, 302)
 
 
@@ -123,6 +129,7 @@ class DashboardPekerjaanCompany(TestCase):
             status ='Tutup'
 
         )
+
         self.lowongan_dibuka = lowongan1
         self.lowongan_dibuka.save()
 
@@ -140,19 +147,18 @@ class DashboardPekerjaanCompany(TestCase):
         self.assertEqual(response.context['total_lowongan'], 2)
         self.assertEqual(response.context['total_dibuka'], 1)
         self.assertEqual(response.context['total_ditutup'], 1)
-
-    def lowongan_dibuka_response_logged_in(self):
-        response = self.client.get('/lowongan-dibuka/')
+        
+    def test_lowongan_dibuka_response_logged_in(self):
+        response = self.client.get(LOWONGAN_DIBUKA)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lowongan_dibuka.html')
-        self.assertEqual(response.context['lowongan_dibuka'], self.lowongan_dibuka)
+        self.assertContains(response, 'Lowongan Dibuka')
 
-    def lowongan_ditutup_response_logged_in(self):
-        response = self.client.get('/lowongan-ditutup/')
+    def test_lowongan_ditutup_response_logged_in(self):
+        response = self.client.get(LOWONGAN_DITUTUP)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lowongan_ditutup.html')
-        self.assertEqual(response.context['lowongan_ditutup'], self.lowongan_ditutup)
-        
+        self.assertContains(response, 'Lowongan Ditutup')
 
 # test-case kalau sudah login (tapi bukan perusahaan)
 class DashboardProposalLowonganTestNotAdmin(TestCase):
@@ -209,13 +215,13 @@ class DashboardProposalLowonganTestNotAdmin(TestCase):
         self.assertRedirects(response, reverse(LOGIN)) # sesuaikan dengan login 
 
     def test_lowongan_dibuka_response(self):
-        response = self.client.get('/lowongan-dibuka/')
+        response = self.client.get(LOWONGAN_DIBUKA)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse(LOGIN)) # sesuaikan dengan login 
     
 
     def test_lowongan_ditutup_response(self):
-        response = self.client.get('/lowongan-ditutup/')
+        response = self.client.get(LOWONGAN_DITUTUP)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse(LOGIN)) # sesuaikan dengan login 
     
