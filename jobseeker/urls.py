@@ -20,4 +20,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("cv.urls")),
     path("", include('homepage.urls')),
+    path("", include('dashboard_lowongan_kerja_perusahaan.urls')),
 ]
