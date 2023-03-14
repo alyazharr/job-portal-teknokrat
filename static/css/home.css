@@ -1,0 +1,18 @@
+.outer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 590px;
+    width: 100%;
+    background-image: url("../images/bg_landing_page.png");
+}
+
+.outer .inner-content h1 {
+    font-weight: 600;
+    font-size: 50px;
+    color: white;
+}
+
+.content-form {
+    width: 100%;
+}

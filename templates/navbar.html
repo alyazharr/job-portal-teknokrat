@@ -15,7 +15,7 @@
                 <a href="/" class="nav-link" style="padding: 20px">Beranda</a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link" style="padding: 20px">nav-item</a>
+                <a href="" class="nav-link" style="padding: 20px">Cari lowongan</a>
             </li>
 
         </ul>
@@ -23,9 +23,8 @@
     {% if request.user.is_authenticated %}
     <a href="{% url 'cv:profile' %}" class="nav-link" style="padding: 20px;">{{request.user.username}}</a>
 
-    <a href="" class="nav-link" style="padding: 20px;">Logout</a>
+    <a href="{% url 'homepage:logout' %}" class="nav-link" style="padding: 20px;">Logout</a>
     {% else %}
-    <a href="" class="nav-link" style="padding: 20px;">Login</a>
-    <a href="" class="nav-link" style="padding: 20px;">Register</a>
+    <a href="{% url 'homepage:login' %}" id="login-btn" class="nav-link btn">Login</a>
     {% endif %}
 </nav>

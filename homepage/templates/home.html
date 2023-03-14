@@ -1,18 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>My Landing Page</title>
-  </head>
-  <body>
-    {% if user.is_authenticated %}
-    <h2>Welcome, {{ user.username }}!</h2>
-    <h2>Welcome, {{ user.npm }}!</h2>
-    {% else %}
-    <h2>Welcome, world!</h2>
-    {% endif %}
-    <p>This is my landing page. Here, I can show some information about my website or application.</p>
-    <p>For example, I can display some featured products, recent posts, or upcoming events.</p>
-    <p>Or I can provide some navigation links to other pages of my site or application.</p>
-    <p>Thank you for visiting!</p>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Jobseeker Teknokrat</title>
+<link rel="stylesheet" href="{% static 'css/home.css'%}" />
+{% endblock meta %}
+
+{% block content %}
+<div class="outer">
+  <div class="inner-content">
+    <h1>Cari Lowongan Pekerjaan</h1>
+    <div class="row height d-flex content-form">
+      <div class="form">
+        <i class="fa fa-search"></i>
+        <input type="text" class="form-control form-input" placeholder="Cari Pekerjaan...">
+      </div>
+    </div>
+</div>
+{% endblock content %}

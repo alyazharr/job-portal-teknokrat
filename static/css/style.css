@@ -63,3 +63,15 @@ html, body {
     font-weight: 600;
 }
 
+nav #login-btn {
+    background-color: white;
+    color: #D02E4A;
+    border: 2px solid white;
+    margin-right: 40px;
+    border-radius: 50px;
+}
+
+nav #login-btn:hover {
+    transform: translateY(-7px);
+    transition: all 0.3s ease;
+}
