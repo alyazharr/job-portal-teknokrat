@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Dashboard Proposal Lowongan Kerja</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="static/css/style.css">
+<style>
+    table tbody:nth-child(odd) {
+      background-color: #D1D5DB;
+    }
+  
+    table thead{
+      background-color: #D1D5DB;
+    }
+  
+    table tbody:nth-child(even) {
+    background-color: #ffffff;
+    }
+
+    .table td {
+  padding: 20px;
+  }
+
+
+  </style>
+{% load static %}
+{% endblock meta %}
+
+{% block content %}
+<div class="d-flex">
+    <div class="border-end bg-white" style="height: 100vh;">
+      <div class="list-group list-group-flush">
+        <h5 class="list-group-item list-group-item-action list-group-item-light p-3">Dashboard Perusahaan</h5>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" id="dashboard-lowongan-pekerjaan" data-url="dashboard_lowongan_kerja_perusahaan.html" aria-selected="false"
+          href="{% url 'dashboard-lowongan-pekerjaan'%}">
+        Riwayat Lowongan
+        </a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" data-url="lowongan_dibuka.html" id="lowongan-dibuka" aria-selected="false"
+          href="{% url 'lowongan-dibuka'%}">Lowongan Dibuka</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 " data-url="lowongan_ditutup.html" id="lowongan-ditutup" aria-selected="false"
+          href="{% url 'lowongan-ditutup'%}">Lowongan Ditutup</a>
+      </div>
+  </div>
+
+<div style="margin: 30px;">
+    <br>
+    <div class="container center">
+        <h3 style="color: #D02E4A;"><b>Lowongan Ditutup</b></h3>
+    </div>
+    <br>
+    <div class="container center">
+        <div class="text-center">
+            <table class="table table-borderless">
+                <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Tanggal Posting</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Pelamar</th>
+                    <th scope="col">Ubah Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                {% for lowongan in lowongan_ditutup %}
+                <tbody>
+                <tr>
+                    <td >{{lowongan.posisi}}</td>
+                    <td>{{lowongan.created_at}}</td>
+                    <td>{{lowongan.status}}</td>
+                    <td><button class="btn btn-primary">Preview</button></td>
+                    <td><div class="dropdown show">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Dropdown link
+                        </a>
+                      
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item" href="#">Buka</a>
+                          <a class="dropdown-item" href="#">Tutup</a>
+                        </div>
+                      </div></td>
+                    <td><button class="btn btn-outline-secondary">Edit</button></td>
+                </tr>
+                </tbody>
+                {%endfor%}
+            </table>
+        </div>
+               
+    </div>
+    </div>
+    <br>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+
+
+{% endblock content %}
