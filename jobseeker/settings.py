@@ -23,9 +23,46 @@ SECRET_KEY = "django-insecure-+5jenqt^b@78zpr3o47exk25-cv(^d0lyz5roiz)d_9&*-46=i
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-
+CKEDITOR_CONFIGS = {
+    'default': {
+        'height': 'full', 
+        'width': 'full', 
+        
+        'toolbar_YourCustomToolbarConfig': [
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike',]},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList','CheckList', 'Blockquote']},
+            {'name': 'links', 'items': ['Link']},   
+            {'name': 'styles', 'items': [ 'FontSize']},
+            {'name': 'yourcustomtools', 'items': [
+                'Preview',
+            ]},
+        ],
+        'toolbar': 'YourCustomToolbarConfig', 
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            'uploadimage', # the upload image feature
+            # your extra plugins here
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+    }
+}
 
 HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME', '')
+
+ENVIRONMENT = os.environ.get("ENVIRONMENT","")
 
 PRODUCTION = True if HEROKU_APP_NAME  else False
 
@@ -45,6 +82,7 @@ INSTALLED_APPS = [
     "jobseeker",
     "cv",
     "homepage",
+    "ckeditor"
 ]
 
 MIDDLEWARE = [
@@ -83,19 +121,31 @@ WSGI_APPLICATION = "jobseeker.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASE_PRODUCTION = {
+DATABASE = {
     "ENGINE" : "django.db.backends.sqlite3",
     "NAME" : BASE_DIR / "db.sqlite3"
 }
 
-DATABASE_DEVELOPMENT = {
-    "ENGINE": "django.db.backends.mysql",
-    "NAME" : "teknokrat",
-    "USER" : "root",
-}
+if ENVIRONMENT == 'HEROKU':
+    DATABASE = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': 5432,
+    }
+
+elif ENVIRONMENT == "":
+    DATABASE = {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME" : "teknokrat",
+        "USER" : "root",
+    }    
+
 
 DATABASES = {
-    "default": DATABASE_DEVELOPMENT if not PRODUCTION else DATABASE_PRODUCTION 
+    "default": DATABASE 
 }
 
 
@@ -115,9 +165,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE='id'
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
@@ -133,6 +183,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+CKEDITOR_BASEPATH = "/my_static/ckeditor/ckeditor/"
 
 # Auth settings
 AUTH_USER_MODEL = 'jobseeker.Users'
