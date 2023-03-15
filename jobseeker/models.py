@@ -3,7 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from .managers import UsersManager
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
-
+from django.core.exceptions import ValidationError
+from ckeditor.fields import RichTextField
+from .validators import validate_after_today
 
 class CV(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -65,29 +67,7 @@ class Lamar(models.Model):
 
 
 
-class Lowongan(models.Model):
-    class StatusLowongan(models.TextChoices):
-        UNVERIFIED = "Belum terverifikasi", _("Belum terverifikasi")
-        VERIFIED = "Sudah terverifikasi", _("Sudah terverifikasi")
-        REJECTED = "Ditolak", _("Sudah Ditolak")
-        OPEN = "Buka", _("Buka")
-        CLOSED = "Tutup", _("Tutup")
 
-    id = models.BigAutoField(primary_key=True)
-    users_id = models.PositiveBigIntegerField()
-    posisi = models.CharField(max_length=255)
-    gaji = models.CharField(max_length=255)
-    lama_pengalaman = models.CharField(max_length=255)
-    deskripsi = models.TextField(null=True)
-    requirements = models.JSONField(null=True)
-    status = models.CharField(max_length=255,choices=StatusLowongan.choices,default=StatusLowongan.UNVERIFIED)
-    buka_lowongan = models.DateField(null=True)
-    batas_pengumpulan = models.DateField()
-    created_at = models.DateTimeField(blank=True, null=True, auto_now=True)
-    updated_at = models.DateTimeField(blank=True, null=True,auto_now=True)
-
-    class Meta:
-        db_table = 'lowongan'
 
 class PasswordResets(models.Model):
     email = models.CharField(max_length=255)
@@ -200,7 +180,33 @@ class Users(AbstractUser):
     def is_superuser(self):
         return self.role_id == 4
 
-    def clean(self):
-        super().clean()
-        self.email = self.__class__.objects.normalize_email(self.email)
+class Lowongan(models.Model):
+    class StatusLowongan(models.TextChoices):
+        UNVERIFIED = "Belum terverifikasi", _("Belum terverifikasi")
+        VERIFIED = "Sudah terverifikasi", _("Sudah terverifikasi")
+        REJECTED = "Ditolak", _("Sudah Ditolak")
+        OPEN = "Buka", _("Buka")
+        CLOSED = "Tutup", _("Tutup")
 
+    id = models.BigAutoField(primary_key=True)
+    users_id = models.ForeignKey(Users, on_delete=models.CASCADE)
+    posisi = models.CharField(max_length=255)
+    gaji = models.FloatField(max_length=255)
+    lama_pengalaman = models.PositiveIntegerField()
+    deskripsi = RichTextField(null=True)
+    requirements = RichTextField(null=True)
+    status = models.CharField(max_length=255,choices=StatusLowongan.choices,default=StatusLowongan.UNVERIFIED)
+    buka_lowongan = models.DateField(null=True)
+    batas_pengumpulan = models.DateField()
+    created_at = models.DateTimeField(blank=True, null=True, auto_now=True)
+    updated_at = models.DateTimeField(blank=True, null=True,auto_now=True)
+
+    def clean(self):
+        if self.batas_pengumpulan <= self.buka_lowongan:
+            raise ValidationError(_('Tanggal pembukaan harus sebelum tanggal penutupan'),code='invalid_date')
+        validate_after_today(self.buka_lowongan)
+        validate_after_today(self.batas_pengumpulan)
+
+
+    class Meta:
+        db_table = 'lowongan'
