@@ -15,7 +15,7 @@ Test:
     - python manage.py collectstatic --no-input
   when: on_success
   script:
-    - coverage run --include="./*/*" --omit="./manage.py" manage.py test
+    - coverage run --omit="**/__init__.py,*/admin.py,*/apps.py,manage.py,*/test/*,static/*,static/**,*/wsgi.py,*/asgi.py,*/settings.py" manage.py test
     - coverage report -m
     - coverage xml -i
   artifacts:
@@ -46,6 +46,7 @@ sonarqube-check:
       -D"sonar.sources=."
       -D"sonar.host.url=$SONAR_HOST_URL"
       -D"sonar.login=$SONAR_TOKEN"
+      -D"sonar.coverage.exclusions=**/__init__.py,*/admin.py,*/apps.py,manage.py,*/test/*,static/*,static/**,*/wsgi.py,*/asgi.py,*/settings.py"
       -D"sonar.python.coverage.reportPaths=./coverage.xml"
   allow_failure: true
   only:
