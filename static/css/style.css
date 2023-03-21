@@ -9,7 +9,7 @@ html, body {
 
 .bg-img {
     background-size: cover;
-    background-image: url("../images/main_background.png");
+    background-image: url("../images/background.png");
 }
 
 .bg-base-red {
@@ -39,6 +39,13 @@ html, body {
     font-size: 16px;
     line-height: 140%;
     color: #FFFFFF;
+}
+
+.nav-link:hover {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    color: #dddddd;
 }
 
 .header {
