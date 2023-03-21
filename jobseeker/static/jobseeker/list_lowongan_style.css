@@ -1,0 +1,9 @@
+@media screen and (max-width:768px) {
+    #list-lowongan {
+        grid-template-columns: 1fr !important;
+    }
+    
+    #list-lowongan-container {
+        width: 95% !important;
+    }
+}

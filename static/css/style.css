@@ -1,19 +1,22 @@
-html, body {
-    margin:0;
-    padding:0;
+html,
+body {
+    margin: 0;
+    padding: 0;
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-size: 16px;
-    
+
 }
 
 .bg-img {
     background-size: cover;
     background-image: url("../images/background.png");
+    background-repeat: no-repeat;
 }
 
+
 .bg-base-red {
-    background-color: #D02E4A;
+    background-color: #B0152D;
 }
 
 .bg-base-purple {
@@ -22,13 +25,14 @@ html, body {
 
 .bg-base-purple:hover {
     background-color: #32308b;
-    
+
 }
+
 .font-base-red {
     color: #D02E4A;
 }
 
-.segment-card{
+.segment-card {
     background-color: #FFFFFF;
     border-radius: 8px;
     border: 1px solid #D1D5DB;
@@ -38,14 +42,14 @@ html, body {
     font-weight: 600;
     font-size: 16px;
     line-height: 140%;
-    color: #FFFFFF;
+    color: #B0152D;
 }
 
 .nav-link:hover {
     font-weight: 600;
     font-size: 16px;
     line-height: 140%;
-    color: #dddddd;
+    color: #E74141;
 }
 
 .header {
@@ -63,3 +67,31 @@ html, body {
     font-weight: 600;
 }
 
+.nav-item .nav-link {
+    padding: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-item .nav-link {
+        padding: 3px 0 10px 30px !important;
+    }
+
+    .logo {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .logo2 {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .logo {
+        display: none;
+    }
+    .logo2{
+        display: block;
+    }
+}

@@ -1,31 +1,45 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg bg-base-red">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-        aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-expand-lg" style="box-shadow: 0px 2px 4px #D9D9D9; background-color: #fff;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img class="logo" src="{% static '/images/UNIVERSITASTEKNOKRAT.png' %}" height="52px"
+                    style="width: 3.7rem; margin-left: 1.2rem; margin-right: 12px;" alt="Logo">
+        </a>
+        <button  class="navbar-toggler float-end" style="background-color: transparent;">
+            <span class="navbar-toggler-icon">
+                <img src="{% static '/images/navbarfolded.png' %}" width="25px" height="25px" alt="" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            </span>
+          </button>
+          
+        <div class="collapse navbar-collapse" id="navbarSupportedContent"
+            style="height: 64px;">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <img class="logo2" src="{% static '/images/UNIVERSITASTEKNOKRAT.png' %}" height="52px"
+                    style="width: 3.7rem; margin-left: 1.2rem; margin-right: 12px;" alt="Logo">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">Beranda</a>
+                </li>
+                {% if request.user.role_id == 3 or request.user.role_id == 4 %}
+                <li class="nav-item">
+                    <a href="{% url 'dashboard_proposal_lowongan:dashboard' %}" class="nav-link">Verifikasi Lowongan</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a href="" class="nav-link">nav-item</a>
+                </li>
+            </ul>
 
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-        <ul class="navbar-nav mr-auto">
-            <div>
-                <img src="{% static '/images/UNIVERSITASTEKNOKRAT.png' %}" style="width: 4rem; margin-left: 1.2rem;"
-                    alt="Logo">
+            <div class="d-flex flex-column align-items-end">
+                <div class="d-flex flex-row justify-content-end mb-2">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'cv:profile' %}" class="nav-link">{{request.user.username}}</a>
+                    <a href="" class="nav-link" style="margin-right: 12px;">Logout</a>
+                    {% else %}
+                    <a href="" class="nav-link">Login</a>
+                    <a href="" class="nav-link">Register</a>
+                    {% endif %}
+                </div>
             </div>
-            <li class="nav-item">
-                <a href="/" class="nav-link" style="padding: 20px">Beranda</a>
-            </li>
-            <li class="nav-item">
-                <a href="" class="nav-link" style="padding: 20px">nav-item</a>
-            </li>
-
-        </ul>
+        </div>
     </div>
-    {% if request.user.is_authenticated %}
-    <a href="{% url 'cv:profile' %}" class="nav-link" style="padding: 20px;">{{request.user.username}}</a>
-
-    <a href="" class="nav-link" style="padding: 20px;">Logout</a>
-    {% else %}
-    <a href="" class="nav-link" style="padding: 20px;">Login</a>
-    <a href="" class="nav-link" style="padding: 20px;">Register</a>
-    {% endif %}
 </nav>
