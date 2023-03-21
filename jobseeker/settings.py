@@ -82,7 +82,8 @@ INSTALLED_APPS = [
     "jobseeker",
     "cv",
     "homepage",
-    "ckeditor"
+    "ckeditor",
+    "dashboard_proposal_lowongan"
 ]
 
 MIDDLEWARE = [

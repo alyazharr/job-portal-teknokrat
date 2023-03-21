@@ -1,6 +1,6 @@
-projectKey=ppl-tracer-study_tracerstudy-teknokrat_AYaiVCjpDKZBEovD9Pnr
+projectKey=PBI-11-Dashboard-Proposal-Lowongan
 serverUrl=https://sonarqube.cs.ui.ac.id
 serverVersion=8.9.2.46101
-dashboardUrl=https://sonarqube.cs.ui.ac.id/dashboard?id=ppl-tracer-study_tracerstudy-teknokrat_AYaiVCjpDKZBEovD9Pnr
-ceTaskId=AYaiVeKWDKZBEovD9Pn5
-ceTaskUrl=https://sonarqube.cs.ui.ac.id/api/ce/task?id=AYaiVeKWDKZBEovD9Pn5
+dashboardUrl=https://sonarqube.cs.ui.ac.id/dashboard?id=PBI-11-Dashboard-Proposal-Lowongan
+ceTaskId=AYcDr6_JSUPdlmizh94Y
+ceTaskUrl=https://sonarqube.cs.ui.ac.id/api/ce/task?id=AYcDr6_JSUPdlmizh94Y
