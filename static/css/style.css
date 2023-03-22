@@ -5,7 +5,7 @@ body {
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-size: 16px;
-
+    
 }
 
 .bg-img {
@@ -16,7 +16,8 @@ body {
 
 
 .bg-base-red {
-    background-color: #B0152D;
+    background: linear-gradient(111.75deg, #EF4444 0%, #991B1B 100%);
+    border-radius: 4px;
 }
 
 .bg-base-purple {
@@ -25,7 +26,7 @@ body {
 
 .bg-base-purple:hover {
     background-color: #32308b;
-
+    
 }
 
 .font-base-red {
@@ -38,23 +39,43 @@ body {
     border: 1px solid #D1D5DB;
 }
 
+.primary-btn {
+    background: linear-gradient(111.75deg, #EF4444 0%, #991B1B 100%);
+    border-radius: 4px;
+    align-items: flex-start;
+    padding: 7px 12px 7px 12px;
+    gap: 8px;
+    color: #FFFFFF;
+}
+
+.primary-btn:hover {
+    color: #FFFFFF;
+    transition: 0.3s;
+    filter: brightness(90%);
+}
+
 .nav-link {
     font-weight: 600;
     font-size: 16px;
     line-height: 140%;
-    color: #B0152D;
+    color: #992637;
 }
 
 .nav-link:hover {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 140%;
     color: #E74141;
 }
 
+.nav-link:after {
+    color: #ff506a;
+}
+
 .header {
-    font-size: 52px;
+    font-size: 48px;
     font-weight: 600;
+    background: linear-gradient(111.75deg, #6B7280 0%, #1F2937 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .subheader-1 {
