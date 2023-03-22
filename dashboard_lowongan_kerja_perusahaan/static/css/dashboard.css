@@ -1,0 +1,228 @@
+.badge {
+    padding: 8px 10px 8px 10px;
+    color: #fff;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.card-container {
+    display: grid;
+    place-items: center;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+span small {
+    display: block;
+    padding-left: 5px;
+}
+
+.card {
+    justify-content: center;
+    padding: 5px 8px 5px 8px;
+    margin: 10px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+}
+
+.card-main {
+    justify-content: center;
+    padding: 5px 8px 5px 8px;
+    margin: auto;
+    background-color: #fff;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidebar .hov {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #D02E4A;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar .hov:hover {
+    background-color: #FF6B81 !important;
+    color: #fff;
+}
+
+.sidebar .hov.active {
+    background-color: #D02E4A;
+    color: #fff;
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    text-decoration: none;
+    color: #D02E4A;
+}
+
+.sidebar .closebtn:hover {
+    color: #691422;
+}
+
+.openbtn {
+    font-size: 32px;
+    cursor: pointer;
+    background-color: #fff;
+    color: rgb(67, 66, 66);
+    padding: 10px 25px;
+    border: none;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.openbtn:hover {
+    color: #D02E4A;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+#main .msg {
+    background-color: rgb(240, 230, 230);
+    padding: 1%;
+    text-align: center;
+    vertical-align: middle;
+    color: #D02E4A;
+    margin-top: 3%;
+    height: 50px;
+    line-height: 20px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidebar {
+        padding-top: 15px;
+    }
+
+    .sidebar a {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .card-container {
+        row-gap: 2px !important;
+        margin-top: 0% !important;
+        margin-bottom: 0% !important;
+        display: grid !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center;
+        width: 100% !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .card-container .card {
+        margin-top: 1.5% !important;
+        margin-bottom: 0% !important;
+    }
+
+    .card-container .top-card {
+        margin-top: 5% !important;
+    }
+
+    .card {
+        width: 19rem !important;
+    }
+
+    .card-main {
+        width: 19rem !important;
+        margin-top: 5% !important;
+    }
+
+    h3 {
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+    }
+
+    .openbtn img {
+        width: 25px !important;
+        height: 25px !important;
+    }
+
+    .btn-outline-danger {
+        margin-left: 3% !important;
+    }
+
+    .btn-verif {
+        margin-left: 3% !important;
+    }
+
+    #main .msg {
+        margin-top: 10%;
+        height: 50px;
+        line-height: 40px;
+    }
+}
+
+#main .container-fluid .card-main .card-body a {
+    background-image: linear-gradient(to right, #EF4444, #991B1B);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+#main .container-fluid .card-main .card-body a:hover {
+    background-image: linear-gradient(to right, #991B1B, #571313);
+}
+
+.btn {
+    padding: 8px 25px 8px 25px;
+}
+
+.btn-verif {
+    background-color: #15B078;
+    color: #fff;
+    margin-left: 1%;
+}
+
+.btn-verif:hover {
+    background-color: #108a5d;
+    color: #fff;
+}
+
+.btn-outline-danger {
+    margin-left: 1%;
+}
+
+a span:hover {
+    color: #D02E4A
+}
+
+.btn-read{
+    color: white;
+    background-image: linear-gradient(to right, #EF4444, #991B1B);
+}
+
+.btn-outline-submit{
+    color: #0097EC;
+    border-color: #0097EC;
+    border:2px;
+}
