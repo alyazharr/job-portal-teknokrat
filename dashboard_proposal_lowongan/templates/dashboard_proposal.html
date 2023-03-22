@@ -7,10 +7,22 @@
 {% endblock meta %}
 
 {% block script %}
-<script src="{% static 'script/sidebar.js' %}"></script>
+<script src="/static/script/sidebar.js"></script>
 {% endblock script %}
 
 {% block content %}
+{% if messages %}
+{% for message in messages %}
+    {% if 'berhasil' in message|lower%}
+      <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% elif 'ditolak' in message|lower %}
+      <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% else %}
+      <div class="alert alert-info" role="alert">{{ message }}</div>
+    {% endif %}
+{% endfor %}
+{% endif %}
+
 <div id="mySidebar" class="sidebar gh">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
   <a class="hov active" href="{% url 'dashboard_proposal_lowongan:dashboard'%}">Request Verifikasi Lowongan</a>

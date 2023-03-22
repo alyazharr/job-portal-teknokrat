@@ -9,6 +9,9 @@ HOMEPAGE_LOGIN = 'homepage:login'
 global MSG_NO_LOGIN
 MSG_NO_LOGIN = 'Anda tidak memiliki akses ke laman ini. Silakan login sebagai Admin.'
 
+global DARI
+DARI = 'dari'
+
 @login_required(login_url=HOMEPAGE_LOGIN)
 def dashboard(request):
     user = request.user
@@ -139,3 +142,29 @@ def detail(request, id):
         messages.info(request, msg_feedback)
         return redirect(HOMEPAGE_LOGIN) 
     return render(request, "detail_page.html", context)
+
+@login_required(login_url=HOMEPAGE_LOGIN)
+def verifikasi_proses(request, id:int, action:str):
+    user = request.user
+    msg_feedback = MSG_NO_LOGIN
+    if (user.role_id == 3) or (user.role_id == 4):
+        lowongan = Lowongan.objects.get(id=id)
+        company = Users.objects.get(id=lowongan.users_id.id)
+        if lowongan.status == Lowongan.StatusLowongan.UNVERIFIED:
+            if action=="verifikasi":
+                lowongan.status = Lowongan.StatusLowongan.VERIFIED
+                lowongan.save()
+                msg_feedback = 'Verifikasi Proposal Lowongan Pekerjaan '+lowongan.posisi+' '+DARI+' '+company.name+' Telah BERHASIL'
+            elif action=="tolak":
+                lowongan.status = Lowongan.StatusLowongan.REJECTED
+                lowongan.save()
+                msg_feedback = 'Verifikasi Proposal Lowongan Pekerjaan '+lowongan.posisi+' '+DARI+' '+company.name+' Telah DITOLAK'
+            else:
+                msg_feedback = 'Perintah Tidak Dikenali'
+        else:
+            msg_feedback = 'Lowongan Pekerjaan '+lowongan.posisi+' '+DARI+' '+company.name+' Sudah Terverifikasi'
+        messages.info(request, msg_feedback)
+        return redirect('dashboard_proposal_lowongan:dashboard')
+    else:
+        messages.info(request, msg_feedback)
+        return redirect(HOMEPAGE_LOGIN) 
