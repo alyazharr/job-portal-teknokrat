@@ -1,7 +1,6 @@
 from django.test import TestCase, Client
 from jobseeker.models import Users, Lowongan
 from django.urls import reverse
-from django.contrib.messages import get_messages
 from datetime import datetime, timedelta
 import json
 
@@ -28,7 +27,8 @@ DATE_FORMAT = "%Y-%m-%d"
 
     # test-case kalau belum login
 class DashboardPekerjaanNotLoggedIn(TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
+        self.url ='/dashboard-lowongan-pekerjaan/'
         PASSWORD_PERUSAHAAN = "Perusahaan123"
         USERNAME_PERUSAHAAN = "iamperusahaan"
         NPM_PERUSAHAAN = 34567890
@@ -46,7 +46,7 @@ class DashboardPekerjaanNotLoggedIn(TestCase):
 
         # set up membuat lowongan
         self.lowongan = Lowongan.objects.create(
-            users_id = 2,
+            users_id = self.perusahaan,
             posisi="Data Scientist",
             gaji=8000000,
             lama_pengalaman= 10,
@@ -57,9 +57,10 @@ class DashboardPekerjaanNotLoggedIn(TestCase):
         )
     
     def test_dashboard_response(self):
-        response = Client().get(DASHBOARD)
-        self.assertEqual(response.status_code, 302)
-
+        client = Client() 
+        response = client.get(DASHBOARD) 
+        self.assertEquals(response.status_code, 302) 
+ 
     def test_lowongan_dibuka(self):
         response = Client().get(LOWONGAN_DIBUKA)
         self.assertEqual(response.status_code, 302)
@@ -67,7 +68,6 @@ class DashboardPekerjaanNotLoggedIn(TestCase):
     def test_lowongan_ditutup(self):
         response = Client().get(LOWONGAN_DITUTUP)
         self.assertEqual(response.status_code, 302)
-
 
 # test-case kalau sudah login (dan admin)
 class DashboardPekerjaanCompany(TestCase):  
@@ -106,7 +106,7 @@ class DashboardPekerjaanCompany(TestCase):
         )
 
         lowongan1 = Lowongan.objects.create(
-            users_id = 2,
+            users_id = self.perusahaan,
             posisi=POSISI,
             gaji=8000000,
             lama_pengalaman= 10,
@@ -118,7 +118,7 @@ class DashboardPekerjaanCompany(TestCase):
         )
 
         lowongan2 = Lowongan.objects.create(
-            users_id = 2,
+            users_id = self.perusahaan,
             posisi=POSISI,
             gaji=8000000,
             lama_pengalaman= 10,
@@ -160,6 +160,19 @@ class DashboardPekerjaanCompany(TestCase):
         self.assertTemplateUsed(response, 'lowongan_ditutup.html')
         self.assertContains(response, 'Lowongan Ditutup')
 
+    def test_tutup_lowongan(self):
+        response = self.client.get(reverse('ubah_status', args=[self.lowongan_dibuka.id]))
+        self.assertEqual(response.status_code, 302)
+        self.lowongan_dibuka.refresh_from_db()
+        self.assertEqual(self.lowongan_dibuka.status, 'Tutup')
+
+    def test_buka_lowongan(self):
+        response = self.client.get(reverse('ubah_status', args=[self.lowongan_ditutup.id]))
+        self.assertEqual(response.status_code, 302)
+        self.lowongan_ditutup.refresh_from_db()
+        self.assertEqual(self.lowongan_ditutup.status, 'Buka')
+        
+
 # test-case kalau sudah login (tapi bukan perusahaan)
 class DashboardProposalLowonganTestNotAdmin(TestCase):
     def setUp(self) -> None:
@@ -195,7 +208,7 @@ class DashboardProposalLowonganTestNotAdmin(TestCase):
         )
 
         self.lowongan = Lowongan.objects.create(
-            users_id = 2,
+            users_id = self.perusahaan,
             posisi=POSISI,
             gaji=8000000,
             lama_pengalaman= 10,
@@ -219,11 +232,17 @@ class DashboardProposalLowonganTestNotAdmin(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse(LOGIN)) # sesuaikan dengan login 
     
-
     def test_lowongan_ditutup_response(self):
         response = self.client.get(LOWONGAN_DITUTUP)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse(LOGIN)) # sesuaikan dengan login 
+
+    def test_ubah_status(self):
+        response = self.client.get(reverse('ubah_status', args=[self.lowongan.id]))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse(LOGIN))
+
+    
     
     
        
