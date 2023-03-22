@@ -7,14 +7,27 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="outer">
-  <div class="inner-content">
-    <h1>Cari Lowongan Pekerjaan</h1>
-    <div class="row height d-flex content-form">
-      <div class="form">
-        <i class="fa fa-search"></i>
-        <input type="text" class="form-control form-input" placeholder="Cari Pekerjaan...">
+<div class="hero">
+  <img class="ellipse-red" src="{% static 'images/ellipse-red.png' %}">
+  <div class="outer bg-img">
+    <div class="inner-content">
+      <h1>Job Portal</h1>
+      <p>Selamat datang di website kami! Kami adalah platform yang membantu Anda menemukan pekerjaan impian Anda.</p>
+      <div class="row height d-flex content-form">
+        <div class="form">
+          <i class="fa fa-search"></i>
+          <input type="text" class="form-control form-input" placeholder="Cari Pekerjaan...">
+        </div>
+        <img class="ellipse-1" src="{% static 'images/ellipse-1.png' %}">
       </div>
     </div>
+    <div class="inner-icon">
+      <img class="icon-search" src="{% static 'images/icon-search.png' %}">
+      <img class="ellipse-2" src="{% static 'images/ellipse-2.png' %}">
+    </div>
+  </div>
 </div>
+<!-- <div class="footer">
+  <h1>Universitas Teknokrat</h1>
+</div> -->
 {% endblock content %}
