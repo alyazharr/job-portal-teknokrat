@@ -21,13 +21,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("cv.urls")),
     path("", include('homepage.urls')),
-<<<<<<< HEAD
     path("", include('dashboard_lowongan_kerja_perusahaan.urls')),
-    path("buka_lowongan/", views.BukaLowonganFormView.as_view(),name='buka_lowongan')
-]
-
-=======
+    path("buka_lowongan/", views.BukaLowonganFormView.as_view(),name='buka_lowongan'),
     path("buka_lowongan/", views.BukaLowonganFormView.as_view(),name='buka_lowongan'),
     path("dashboard-proposal-lowongan/", include("dashboard_proposal_lowongan.urls")),
 ]
->>>>>>> f1be85d92bf824382001a6debd0206e935bde0a9
+
