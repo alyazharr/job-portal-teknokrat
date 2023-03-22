@@ -3,7 +3,8 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: "Poppins", sans-serif;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -11,9 +12,15 @@
 
 body {
     display: flex;
-    background-color: #D02E4A;
     align-items: center;
 }
+
+.bg-img {
+    background-size: cover;
+    background-image: url("../images/background.png");
+    background-repeat: no-repeat;
+}
+
 .outer {
     align-items: center;
     width: 90vw;
@@ -38,7 +45,7 @@ body {
     width: 500px;
     height: 500px;
     border-radius: 20px;
-    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
     overflow-x: hidden;
     overflow-y: auto;
     overflow: hidden;
@@ -50,14 +57,16 @@ body {
 
 .outer .inner-right .content .inner-content h2 {
     text-align: center;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 20px;
     margin-bottom: 5px;
+    color: #B0152D;
 }
 .outer .inner-right .content .inner-content p {
     font-size: 12px;
     text-align: center;
-    color: #717171;
+    font-weight: 400;
+    color: #B0152D;
 }
 .outer .inner-right .content .inner-content .p-atas {
     margin-bottom: 35px;
@@ -97,6 +106,7 @@ body {
 .mb-3 label {
     font-size: 14px;
     margin: 0;
+    color: #B0152D;
 }
 .button-content {
     margin-top: 50px;
@@ -104,12 +114,13 @@ body {
     justify-content: center;
 }
 #buat-akun-btn {
-    font-size: 18px;
-    padding: 5px 20px;
-    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 20px;
     border: none;
     color: white;
-    background-color: #D02E4A;
+    border-radius: 4px;
+    background: linear-gradient(111.75deg, #EF4444 0%, #991B1B 100%);
 }
 form .back-btn {
     width: 30px;
