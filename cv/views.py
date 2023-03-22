@@ -7,7 +7,7 @@ from jobseeker.models import CV
 @login_required(login_url='/login/')
 def profile(request):
     user = request.user
-    cv = CV.objects.get(users_id=user.id)
+    cv = CV.objects.filter(users_id=user.id).first()
     context = {
         'cv': cv
     }

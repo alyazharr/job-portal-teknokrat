@@ -32,7 +32,7 @@
             <div class="d-flex flex-column align-items-end">
                 <div class="d-flex flex-row justify-content-end mb-2">
                     {% if request.user.is_authenticated %}
-                    <a href="{% url 'cv:profile' %}" class="nav-link">{{request.user.username}}</a>
+                    <a href="{% url 'cv:profile' %}" class="nav-link">{{request.user.name}}</a>
                     <a href="" class="nav-link" style="margin-right: 12px;">Logout</a>
                     {% else %}
                     <a href="" class="nav-link">Login</a>
