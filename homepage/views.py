@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 
 def home(request):
     user = request.user
@@ -14,6 +15,7 @@ def login_user(request):
             login(request, user)
             return redirect('/')
         else:
+            messages.info(request, "Pastikan username dan password yang dimasukkan benar!")
             return redirect('/login/')
             
     return render(request, 'login.html')

@@ -14,11 +14,25 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://apis.google.com/js/api:client.js"></script>
     <link rel="stylesheet" href="{% static 'css/login.css' %}" />
   </head>
 
   <body class="bg-img">
+    {% if messages %}
+      {% for message in messages %}
+        <div
+          class="alert alert-danger alert-dismissible fade show" id="alert-custom" role="alert"
+          style="position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);"
+        > {{ message }} 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
     <div class="outer">
       <div class="inner-left">
           <img src="{% static 'images/UNIVERSITASTEKNOKRAT.png' %}" alt="" />
@@ -50,5 +64,11 @@
         </div>
       </div>
     </div>
+
+    <script type="text/javascript">
+      setTimeout(function () {
+          $('#alert-custom').alert('close');
+      }, 5000);
+    </script>
   </body>
 </html>
