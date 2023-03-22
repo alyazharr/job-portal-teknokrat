@@ -170,6 +170,8 @@ form .back-btn img {
     }
     .outer .inner-right .content .inner-content .atau-line-content {
         font-size: 8px;
+        width: 200px;
+        justify-content: space-around;
     }
     span.icon img {
         width: 15px;
@@ -180,10 +182,6 @@ form .back-btn img {
     .customBtn {
         width: 250px;
         height: 30px;
-    }
-    .outer .inner-right .content .inner-content .atau-line-content {
-        width: 200px;
-        justify-content: space-around;
     }
     .outer .inner-right .content .inner-content .atau-line-content img {
         width: 70px;
