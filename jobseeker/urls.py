@@ -21,6 +21,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("cv.urls")),
     path("", include('homepage.urls')),
+    path("", include('dashboard_lowongan_kerja_perusahaan.urls')),
+    path("buka_lowongan/", views.BukaLowonganFormView.as_view(),name='buka_lowongan'),
     path("buka_lowongan/", views.BukaLowonganFormView.as_view(),name='buka_lowongan'),
     path("dashboard-proposal-lowongan/", include("dashboard_proposal_lowongan.urls")),
 ]
+
