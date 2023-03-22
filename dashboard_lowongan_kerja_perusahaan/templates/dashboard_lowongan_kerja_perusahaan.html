@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block meta %}
-<title>Dashboard Proposal Lowongan Kerja</title>
+<title>Dashboard Perusahaan</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" type="text/css" href="static/css/style.css">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
 <style>
   table tbody:nth-child(odd) {
@@ -18,67 +18,68 @@
     background-color: #D1D5DB;
 
   }
-  
   .table td {
   padding: 20px;
   }
-
-
-
 </style>
 
-{% load static %}
 {% endblock meta %}
+
+{% block script %}
+<script src="{% static 'script/sidebar.js' %}"></script>
+{% endblock script %}
+
 
 {% block content %}
 
-<div class="d-flex">
-  <div class="border-end bg-white" style="height: 100vh;">
-    <div class="list-group list-group-flush">
-      <h5 class="list-group-item list-group-item-action list-group-item-light p-3">Dashboard Perusahaan</h5>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3" id="dashboard-lowongan-pekerjaan" data-url="dashboard_lowongan_kerja_perusahaan.html" aria-selected="false"
-        href="{% url 'dashboard-lowongan-pekerjaan'%}">
-      Riwayat Lowongan
-      </a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3" data-url="lowongan_dibuka.html" id="lowongan-dibuka" aria-selected="false"
-        href="{% url 'lowongan-dibuka'%}">Lowongan Dibuka</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3 " data-url="lowongan_ditutup.html" id="lowongan-ditutup" aria-selected="false"
-      href="{% url 'lowongan-ditutup'%}">Lowongan Ditutup</a>
-    </div>
+<div id="mySidebar" class="sidebar gh">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+  <a class="hov active" href="{% url 'dashboard-lowongan-pekerjaan'%}">Dashboard Perusahaan</a>
+  <a class="hov gh" href="{% url 'lowongan-dibuka'%}">Lowongan Dibuka</a>
+  <a class="hov gh" href="{% url 'lowongan-ditutup'%}">Lowongan Ditutup</a>
 </div>
 
+<div id="main">
+  <button class="openbtn gh" onclick="toggleNav()" style="background-color: transparent;">
+    <img src="{% static '/images/sidebarhamburger.png' %}" style="width: 50px; height: 50px;" alt="">
+  </button>
+  <div class="container center d ghd">
+    <h2 style="color: #D02E4A;text-align: center; margin-bottom: 1%;"><strong>Dashboard Lowongan Pekerjaan Perusahaan</strong></h2>
+  </div>
+
+
 <div style="margin: 30px;">
-    <br>
   <div class="container center">
       <h3 style="color: #D02E4A;"><b>Riwayat Lowongan</b></h3>
-  </div>
-  <br>
-  <div class="container center">
-    <div style="display:flex; gap:20px;"}>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Total Lowongan</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{total_lowongan}}</h6>
-        </div>
+  
+
+
+    <div style="display:flex; gap:10px;"}>
+
+      <div class="card gh" style="background-color: #fff;">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/total.png' %}" width="25" height="25" alt="">
+          <small style="color: #0097EC;"><strong>Total Lowongan: {{total_lowongan}}</strong></small><br>
+        </span>
       </div>
 
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Lowongan Dibuka</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{total_dibuka}}</h6>
-        </div>
+      <div class="card gh" style="background-color: #fff">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/verif.png' %}" width="25" height="25" alt="">
+          <small style="color:green"><strong>Lowongan Dibuka: {{total_dibuka}}</strong></small><br>
+        </span>
       </div>
 
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Lowongan Ditutup</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{total_ditutup}}</h6>
-        </div>
+      <div class="card gh" style="background-color: #fff">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/tolak.png' %}" width="25" height="25" alt="">
+          <small style="color:red"><strong>Lowongan Ditutup: {{total_ditutup}}</strong></small><br>
+        </span>
       </div>
     </div>
-  </div>
+  </div>  
 
-  <div style="margin: 20px;"></div>
+  <div style="margin: 10px;"></div>
   <div class="text-center">
     <br>
     <div class="container center">
@@ -98,18 +99,22 @@
             <tr>
               <td>{{lowongan.posisi}}</td>
               <td>{{lowongan.created_at}}</td>
-              <td>{{lowongan.status}}</td>
-              <td><button class="btn btn-primary">Preview</button></td>
-              <td><div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Dropdown link
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item" href="#">Buka</a>
-                  <a class="dropdown-item" href="#">Tutup</a>
-                </div>
-              </div></td>
-              <td><button class="btn btn-outline-secondary">Edit</button></td>
+              {% if lowongan.status == 'Buka' %}
+              <td style="color:green;"><b>{{lowongan.status}}</b></td>
+              {% else %}
+              <td style="color:#D02E4A;"><b>{{lowongan.status}}</b></td>
+              {% endif %}
+              <td><button class="btn btn-read">Preview</button></td>
+              <td>
+                <form action="{% url 'ubah_status' lowongan.id %}" method="GET">
+                {% if lowongan.status == 'Buka' %}
+                  <button class="btn btn-outline-danger " type="submit">Tutup</button>
+                {% else %}
+                  <button class="btn btn-outline-success" type="submit" >Buka</button>
+                {% endif %}
+                </form>
+              </td>
+              <td><button class="btn btn-outline-primary">Edit</button></td>
             </tr>
           </tbody>
           {%endfor%}
