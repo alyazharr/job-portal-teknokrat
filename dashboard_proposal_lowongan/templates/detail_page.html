@@ -63,9 +63,9 @@
                 <br>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
                     {% if lowongan.status.strip|lower != 'sudah terverifikasi' and lowongan.status.strip|lower != 'ditolak' %}
-                    <a href="#" role="button" class="btn btn-verif">
+                    <a href="{% url 'dashboard_proposal_lowongan:verifikasi_proses' id=lowongan.id action='verifikasi' %}" role="button" class="btn btn-verif">
                         <strong>Verifikasi</strong></a>
-                    <a href="#" role="button" class="btn btn-outline-danger" style="margin-left: 1%;">
+                    <a href="{% url 'dashboard_proposal_lowongan:verifikasi_proses' id=lowongan.id action='tolak' %}" role="button" class="btn btn-outline-danger" style="margin-left: 1%;">
                         <strong>Tolak</strong></a>
                     {% endif%}
                 </div>
