@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div id="mySidebar" class="sidebar gh">
+<div id="mySidebar" class="sidebar b">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
   <a class="hov active" href="{% url 'dashboard-lowongan-pekerjaan'%}">Dashboard Perusahaan</a>
   <a class="hov gh" href="{% url 'lowongan-dibuka'%}">Lowongan Dibuka</a>
@@ -38,20 +38,20 @@
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
-                {% for lowongan in lowongan_dibuka %}
+                {% for lowongan_dibuka in lowongan_dibuka %}
                 <tbody>
                 <tr>
-                  <td>{{lowongan.posisi}}</td>
-                  <td>{{lowongan.created_at}}</td>
-                  {% if lowongan.status == 'Buka' %}
-                  <td style="color:green;"><b>{{lowongan.status}}</b></td>
+                  <td>{{lowongan_dibuka.posisi}}</td>
+                  <td>{{lowongan_dibuka.created_at}}</td>
+                  {% if lowongan_dibuka.status == 'Buka' %}
+                  <td style="color:green;"><b>{{lowongan_dibuka.status}}</b></td>
                   {% else %}
-                  <td style="color:#D02E4A;"><b>{{lowongan.status}}</b></td>
+                  <td style="color:#D02E4A;"><b>{{lowongan_dibuka.status}}</b></td>
                   {% endif %}
                   <td><button class="btn btn-read">Preview</button></td>
                   <td>
-                    <form action="{% url 'ubah_status' lowongan.id %}" method="GET">
-                    {% if lowongan.status == 'Buka' %}
+                    <form action="{% url 'ubah_status' lowongan_dibuka.id %}" method="GET">
+                    {% if lowongan_dibuka.status == 'Buka' %}
                       <button class="btn btn-outline-danger" type="submit">Tutup</button>
                     {% else %}
                       <button class="btn btn-outline-success" type="submit" >Buka</button>
