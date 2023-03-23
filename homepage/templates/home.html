@@ -14,10 +14,10 @@
       <h1>Job Portal</h1>
       <p>Selamat datang di website kami! Kami adalah platform yang membantu Anda menemukan pekerjaan impian Anda.</p>
       <div class="row height d-flex content-form">
-        <div class="form">
+        <form class="form" action="/list_lowongan/">
           <em class="fa fa-search"></em>
-          <input type="text" class="form-control form-input" placeholder="Cari Pekerjaan...">
-        </div>
+          <input name="search_query" type="text" class="form-control form-input" placeholder="Cari Pekerjaan...">
+        </form>
         <img class="ellipse-1" alt="ellipse 1" src="{% static 'images/ellipse-1.png' %}">
       </div>
     </div>
