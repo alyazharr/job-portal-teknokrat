@@ -1,2 +1,2 @@
 migrate: python manage.py migrate
-web: gunicorn jobseeker.wsgi --log-file -
+web:  python manage.py collectstatic --noinput && gunicorn jobseeker.wsgi --log-file -

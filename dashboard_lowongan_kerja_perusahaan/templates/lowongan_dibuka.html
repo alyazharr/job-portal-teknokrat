@@ -1,0 +1,77 @@
+{% extends 'dashboard_lowongan_kerja_perusahaan.html' %}
+{% load static %}
+
+{% block content %}
+
+<div id="mySidebar" class="sidebar b">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+  <a class="hov active" href="{% url 'dashboard-lowongan-pekerjaan'%}">Dashboard Perusahaan</a>
+  <a class="hov gh" href="{% url 'lowongan-dibuka'%}">Lowongan Dibuka</a>
+  <a class="hov gh" href="{% url 'lowongan-ditutup'%}">Lowongan Ditutup</a>
+</div>
+
+<div id="main">
+  <button class="openbtn gh" onclick="toggleNav()" style="background-color: transparent;">
+    <img src="{% static '/images/sidebarhamburger.png' %}" style="width: 50px; height: 50px;" alt="">
+  </button>
+  <div class="container center d ghd">
+    <h2 style="color: #D02E4A;text-align: center; margin-bottom: 1%;"><strong>Dashboard Lowongan Pekerjaan Perusahaan</strong></h2>
+  </div>
+
+
+<div style="margin: 30px;">
+    <br>
+    <div class="container center">
+        <h3 style="color: #D02E4A;"><b>Lowongan Dibuka</b></h3>
+    </div>
+    <br>
+    <div class="container center">
+        <div class="text-center">
+            <table class="table table-borderless">
+                <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Tanggal Posting</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Pelamar</th>
+                    <th scope="col">Ubah Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                {% for lowongan_dibuka in lowongan_dibuka %}
+                <tbody>
+                <tr>
+                  <td>{{lowongan_dibuka.posisi}}</td>
+                  <td>{{lowongan_dibuka.created_at}}</td>
+                  {% if lowongan_dibuka.status == 'Buka' %}
+                  <td style="color:green;"><b>{{lowongan_dibuka.status}}</b></td>
+                  {% else %}
+                  <td style="color:#D02E4A;"><b>{{lowongan_dibuka.status}}</b></td>
+                  {% endif %}
+                  <td><button class="btn btn-read">Preview</button></td>
+                  <td>
+                    <form action="{% url 'ubah_status' lowongan_dibuka.id %}" method="GET">
+                    {% if lowongan_dibuka.status == 'Buka' %}
+                      <button class="btn btn-outline-danger" type="submit">Tutup</button>
+                    {% else %}
+                      <button class="btn btn-outline-success" type="submit" >Buka</button>
+                    {% endif %}
+                    </form>
+                  </td>
+                  <td><button class="btn btn-outline-primary">Edit</button></td>
+                </tr>
+                </tbody>
+                {%endfor%}
+            </table>
+        </div>      
+    </div>
+    <br>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+
+
+{% endblock content %} 
