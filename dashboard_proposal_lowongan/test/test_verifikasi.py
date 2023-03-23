@@ -173,4 +173,13 @@ class VerifikasiTestAdmin(BaseTestCase):
         response = self.client.get(url)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'Lowongan Pekerjaan '+self.lowongan.posisi+' dari '+self.perusahaan.name+' Sudah Terverifikasi')
+        self.assertEqual(str(messages[0]), 'Lowongan Pekerjaan '+self.lowongan.posisi+' dari '+self.perusahaan.name+' '+self.lowongan.status)
+
+    def test_lowongan_already_tolak(self):
+        self.lowongan.status = Lowongan.StatusLowongan.REJECTED
+        self.lowongan.save()
+        url = reverse(VERIFIKASI_PROSES, args=[self.lowongan.id, VERIFIKASI])
+        response = self.client.get(url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'Lowongan Pekerjaan '+self.lowongan.posisi+' dari '+self.perusahaan.name+' '+self.lowongan.status)

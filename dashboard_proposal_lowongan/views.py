@@ -44,6 +44,7 @@ def dashboard(request):
                 'unverified':len(lowongan_obj),
                 'tolak':len(tolak),
             }
+        messages.info(request, msg_feedback)
     else:
         messages.info(request, msg_feedback)
         return redirect(HOMEPAGE_LOGIN)
@@ -162,7 +163,7 @@ def verifikasi_proses(request, id:int, action:str):
             else:
                 msg_feedback = 'Perintah Tidak Dikenali'
         else:
-            msg_feedback = 'Lowongan Pekerjaan '+lowongan.posisi+' '+DARI+' '+company.name+' Sudah Terverifikasi'
+            msg_feedback = 'Lowongan Pekerjaan '+lowongan.posisi+' '+DARI+' '+company.name+' '+lowongan.status
         messages.info(request, msg_feedback)
         return redirect('dashboard_proposal_lowongan:dashboard')
     else:
