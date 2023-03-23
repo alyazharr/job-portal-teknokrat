@@ -26,6 +26,23 @@
                 {%if lowongan%}
                 <div class="card" style="width: 100%; margin-top:1%;">
                     <div class="card-body">
+                        {% if lowongan.status.strip|lower == 'sudah terverifikasi'%}
+                        <span class="badge rounded-pill j" style="background-color: #E6F4CE; color: #3D581B;">TERVERIFIKASI
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'belum terverifikasi'%}
+                        <span class="badge rounded-pill j" style="background-color: #FEEEC9; color: #845124;">BELUM
+                        TERVERIFIKASI
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'ditolak'%}
+                        <span class="badge rounded-pill ds" style="background-color: #FEEBED; color: #9D3B48;">DITOLAK
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'buka'%}
+                        <span class="badge rounded-pill ds" style="background-color: #D8F5FD; color: #1A609C;">BUKA
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'tutup' %}
+                        <span class="badge rounded-pill ds" style="background-color: #e3dddd; color: #6f6d6d; border: #878787 1px;">TUTUP
+                        </span>
+                        {%endif%}
                         <h1 class="card-title" style="text-align: left; margin-bottom:20px;">
                             <strong>{{lowongan.posisi}}</strong>
                         </h1>
@@ -50,19 +67,19 @@
                         <strong>
                             <h4 class="card-title" style="text-align: left; margin-bottom:10px;">Deskripsi
                         </strong></h4>
-                        <p>{{lowongan.deskripsi}}</p> 
+                        <p>{{lowongan.deskripsi | safe}}</p> 
                     </div>
 
                     <div class="card-body">
                         <h4 class="card-title" style="text-align: left; margin-bottom:10px;">
-                            <strong>Requirements</strong>
+                            <strong>Prasyarat</strong>
                         </h4>
-                        <p>{{lowongan.requirements}}</p>
+                        <p>{{lowongan.requirements | safe}}</p>
                     </div>
                 </div>
                 <br>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    {% if lowongan.status.strip|lower != 'sudah terverifikasi' and lowongan.status.strip|lower != 'ditolak' %}
+                    {% if lowongan.status.strip|lower == 'belum terverifikasi'%}
                     <a href="{% url 'dashboard_proposal_lowongan:verifikasi_proses' id=lowongan.id action='verifikasi' %}" role="button" class="btn btn-verif">
                         <strong>Verifikasi</strong></a>
                     <a href="{% url 'dashboard_proposal_lowongan:verifikasi_proses' id=lowongan.id action='tolak' %}" role="button" class="btn btn-outline-danger" style="margin-left: 1%;">

@@ -63,7 +63,13 @@
                 <div class="card-main ad" style="width: 48rem;box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
                     <div class="card-body">
                         {% if lowongan.status.strip|lower == 'sudah terverifikasi'%}
-                        <span class="badge rounded-pill c" style="background-color: #28a745;">TERVERIFIKASI
+                        <span class="badge rounded-pill d" style="background-color: #E6F4CE; color: #3D581B;">TERVERIFIKASI
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'buka'%}
+                        <span class="badge rounded-pill de" style="background-color: #D8F5FD; color: #1A609C;">BUKA
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'tutup' %}
+                        <span class="badge rounded-pill de" style="background-color: #e3dddd; color: #6f6d6d; border: #878787 1px;">TUTUP
                         </span>
                         {%endif%}
                         <h5 class="card-title c"><strong>{{company.0.name}} - {{lowongan.posisi}}</strong></h5>
