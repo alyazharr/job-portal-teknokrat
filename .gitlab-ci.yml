@@ -15,7 +15,7 @@ Test:
     - python manage.py collectstatic --no-input
   when: on_success
   script:
-    - coverage run --omit="**/__init__.py,*/admin.py,*/apps.py,manage.py,*/test/*,static/*,static/**,*/wsgi.py,*/asgi.py,*/settings.py,**/static/**" manage.py test
+    - coverage run --include="./*/*" --omit="./manage.py" manage.py test
     - coverage report -m
     - coverage xml -i
   artifacts:
@@ -23,13 +23,9 @@ Test:
       - coverage.xml
   only:
     - master
-    - staging
-    - merge_requests
 
 sonarqube-check:
   stage: sonarqube
-  dependencies:
-    - Test
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -46,13 +42,9 @@ sonarqube-check:
       -D"sonar.sources=."
       -D"sonar.host.url=$SONAR_HOST_URL"
       -D"sonar.login=$SONAR_TOKEN"
-      -D"sonar.coverage.exclusions=**/__init__.py,*/admin.py,*/apps.py,manage.py,*/test/*,static/*,static/**,*/wsgi.py,*/asgi.py,*/settings.py,**/static/**"
-      -D"sonar.python.coverage.reportPaths=./coverage.xml"
   allow_failure: true
   only:
     - master
-    - staging
-    - merge_requests
 
 Deployment:
   image: ruby:latest
@@ -66,16 +58,3 @@ Deployment:
     url: $HEROKU_APP_HOST
   only:
     - master
-
-Dev Deployment:
-  image: ruby:latest
-  stage: deploy
-  before_script:
-    - gem install dpl
-  script:
-    - dpl --provider=heroku --app=$HEROKU_APPDEV_NAME --api-key=$HEROKU_API_KEY
-  environment:
-    name: staging
-    url: $HEROKU_APPDEV_HOST
-  only:
-    - staging
