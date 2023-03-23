@@ -64,14 +64,20 @@
           <div class="card-body v">
 
             {% if lowongan.status.strip|lower == 'sudah terverifikasi'%}
-            <span class="badge rounded-pill d" style="background-color: #28a745;">TERVERIFIKASI
+            <span class="badge rounded-pill d" style="background-color: #E6F4CE; color: #3D581B;">TERVERIFIKASI
             </span>
             {% elif lowongan.status.strip|lower == 'belum terverifikasi'%}
-            <span class="badge rounded-pill d" style="background-color: #ffc107;">BELUM
+            <span class="badge rounded-pill d" style="background-color: #FEEEC9; color: #845124;">BELUM
               TERVERIFIKASI
             </span>
             {% elif lowongan.status.strip|lower == 'ditolak'%}
-            <span class="badge rounded-pill de" style="background-color: #dc3545;">DITOLAK
+            <span class="badge rounded-pill de" style="background-color: #FEEBED; color: #9D3B48;">DITOLAK
+            </span>
+            {% elif lowongan.status.strip|lower == 'buka'%}
+            <span class="badge rounded-pill de" style="background-color: #D8F5FD; color: #1A609C;">BUKA
+            </span>
+            {% elif lowongan.status.strip|lower == 'tutup' %}
+            <span class="badge rounded-pill de" style="background-color: #e3dddd; color: #6f6d6d; border: #878787 1px;">TUTUP
             </span>
             {%endif%}
 

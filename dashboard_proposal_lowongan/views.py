@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from jobseeker.models import Users, Lowongan
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
 
 global HOMEPAGE_LOGIN
 HOMEPAGE_LOGIN = 'homepage:login'
@@ -20,7 +21,7 @@ def dashboard(request):
     if (user.role_id == 3) or (user.role_id == 4):
         msg_feedback =''
         lowongan_obj = Lowongan.objects.filter(status=Lowongan.StatusLowongan.UNVERIFIED)
-        verif = Lowongan.objects.filter(status=Lowongan.StatusLowongan.VERIFIED)
+        verif = Lowongan.objects.filter(Q(status=Lowongan.StatusLowongan.VERIFIED) | Q(status=Lowongan.StatusLowongan.OPEN) | Q(status=Lowongan.StatusLowongan.CLOSED))
         total_obj = Lowongan.objects.all()
         tolak = Lowongan.objects.filter(status=Lowongan.StatusLowongan.REJECTED)
         if len(lowongan_obj) != 0:
@@ -57,7 +58,7 @@ def dashboard_terverifikasi(request):
     context = {}
     if (user.role_id == 3) or (user.role_id == 4):
         msg_feedback =''
-        lowongan_obj = Lowongan.objects.filter(status=Lowongan.StatusLowongan.VERIFIED)
+        lowongan_obj = Lowongan.objects.filter(Q(status=Lowongan.StatusLowongan.VERIFIED) | Q(status=Lowongan.StatusLowongan.OPEN) | Q(status=Lowongan.StatusLowongan.CLOSED))
         unverif = Lowongan.objects.filter(status=Lowongan.StatusLowongan.UNVERIFIED)
         total_obj = Lowongan.objects.all()
         tolak = Lowongan.objects.filter(status=Lowongan.StatusLowongan.REJECTED)
@@ -82,6 +83,7 @@ def dashboard_terverifikasi(request):
                 'unverified':len(unverif),
                 'tolak':len(tolak)
             }
+        messages.info(request, msg_feedback)
     else:
         messages.info(request, msg_feedback)
         return redirect(HOMEPAGE_LOGIN)
@@ -95,7 +97,7 @@ def dashboard_riwayat(request):
     if (user.role_id == 3) or (user.role_id == 4):
         msg_feedback =''
         lowongan_obj = Lowongan.objects.all()
-        verif = Lowongan.objects.filter(status=Lowongan.StatusLowongan.VERIFIED)
+        verif = Lowongan.objects.filter(Q(status=Lowongan.StatusLowongan.VERIFIED) | Q(status=Lowongan.StatusLowongan.OPEN) | Q(status=Lowongan.StatusLowongan.CLOSED))
         unverif = Lowongan.objects.filter(status=Lowongan.StatusLowongan.UNVERIFIED)
         tolak = Lowongan.objects.filter(status=Lowongan.StatusLowongan.REJECTED)
         if len(lowongan_obj) != 0:
@@ -119,6 +121,7 @@ def dashboard_riwayat(request):
                 'unverified':len(unverif),
                 'tolak':len(tolak),
             }
+        messages.info(request, msg_feedback)
     else:
         messages.info(request, msg_feedback)
         return redirect(HOMEPAGE_LOGIN) 
@@ -139,6 +142,7 @@ def detail(request, id):
                 'company':company,
                 'msg':'Tersedia'
                 }
+        messages.info(request, msg_feedback)
     else:
         messages.info(request, msg_feedback)
         return redirect(HOMEPAGE_LOGIN) 
@@ -163,7 +167,7 @@ def verifikasi_proses(request, id:int, action:str):
             else:
                 msg_feedback = 'Perintah Tidak Dikenali'
         else:
-            msg_feedback = 'Lowongan Pekerjaan '+lowongan.posisi+' '+DARI+' '+company.name+' '+lowongan.status
+            msg_feedback = 'Status Lowongan '+lowongan.posisi+' '+DARI+' '+company.name+' adalah '+lowongan.status
         messages.info(request, msg_feedback)
         return redirect('dashboard_proposal_lowongan:dashboard')
     else:
