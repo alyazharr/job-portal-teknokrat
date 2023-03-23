@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Dashboard Proposal Lowongan</title>
+<link rel="stylesheet" href="{% static 'css/dashboard_verifikasi.css' %}">
+
+{% endblock meta %}
+
+{% block script %}
+{% endblock script %}
+
+{% block content %}
+
+<div id="main">
+    <div class="row align-items-start">
+        <div class="col text-left">
+            <div class="container">
+                <br>
+                <a class="left-arrow" href="{% url 'dashboard_proposal_lowongan:dashboard' %}"
+                    style="color:black; text-decoration: none;margin-left: -1%;">
+                    <img src="{% static '/images/left.png' %}" height="20" alt="">
+                    <span style="font-size: 15px; padding-left: 6px;"><strong>Request Verifikasi Lowongan</strong>
+                    </span>
+                </a>
+                {%if lowongan%}
+                <div class="card" style="width: 100%; margin-top:1%;">
+                    <div class="card-body">
+                        {% if lowongan.status.strip|lower == 'sudah terverifikasi'%}
+                        <span class="badge rounded-pill j" style="background-color: #E6F4CE; color: #3D581B;">TERVERIFIKASI
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'belum terverifikasi'%}
+                        <span class="badge rounded-pill j" style="background-color: #FEEEC9; color: #845124;">BELUM
+                        TERVERIFIKASI
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'ditolak'%}
+                        <span class="badge rounded-pill ds" style="background-color: #FEEBED; color: #9D3B48;">DITOLAK
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'buka'%}
+                        <span class="badge rounded-pill ds" style="background-color: #D8F5FD; color: #1A609C;">BUKA
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'tutup' %}
+                        <span class="badge rounded-pill ds" style="background-color: #e3dddd; color: #6f6d6d; border: #878787 1px;">TUTUP
+                        </span>
+                        {%endif%}
+                        <h1 class="card-title" style="text-align: left; margin-bottom:20px;">
+                            <strong>{{lowongan.posisi}}</strong>
+                        </h1>
+                        <h5 class="card-subtitle mb-2 text-muted" style="margin-bottom: 15px;">{{company}}</h5>
+
+                        <img src="{% static '/images/gaji.png' %}" width="30" height="30" alt=""
+                            style="background-color: white; margin-bottom: 10px;"><span style="padding-left: 10px;">Rp.
+                            {{lowongan.gaji}}</span><br>
+                        <img src="{% static '/images/pengalaman.png' %}" width="25" height="25" alt=""
+                            style="background-color: white;margin-bottom: 10px;"><span
+                            style="padding-left: 10px;">Minimal {{lowongan.lama_pengalaman}} Tahun
+                            Pengalaman</span><br>
+                        <img src="{% static '/images/deadline.png' %}" width="25" height="25" alt=""
+                            style="background-color: white;margin-bottom: 10px;"><span
+                            style="padding-left: 10px;">{{lowongan.buka_lowongan}} s.d.
+                            {{lowongan.batas_pengumpulan}}</span><br>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%; margin-top:2%;">
+                    <div class="card-body">
+                        <strong>
+                            <h4 class="card-title" style="text-align: left; margin-bottom:10px;">Deskripsi
+                        </strong></h4>
+                        <p>{{lowongan.deskripsi | safe}}</p> 
+                    </div>
+
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: left; margin-bottom:10px;">
+                            <strong>Prasyarat</strong>
+                        </h4>
+                        <p>{{lowongan.requirements | safe}}</p>
+                    </div>
+                </div>
+                <br>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    {% if lowongan.status.strip|lower == 'belum terverifikasi'%}
+                    <a href="{% url 'dashboard_proposal_lowongan:verifikasi_proses' id=lowongan.id action='verifikasi' %}" role="button" class="btn btn-verif">
+                        <strong>Verifikasi</strong></a>
+                    <a href="{% url 'dashboard_proposal_lowongan:verifikasi_proses' id=lowongan.id action='tolak' %}" role="button" class="btn btn-outline-danger" style="margin-left: 1%;">
+                        <strong>Tolak</strong></a>
+                    {% endif%}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

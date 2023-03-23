@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Dashboard Terverifikasi</title>
+<link rel="stylesheet" href="{% static 'css/dashboard_verifikasi.css' %}">
+{% endblock meta %}
+
+{% block script %}
+<script src="/static/script/sidebar.js"></script>
+{% endblock script %}
+
+
+{% block content %}
+<div id="mySidebar" class="sidebar r">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a class="hov r" href="{% url 'dashboard_proposal_lowongan:dashboard'%}">Request Verifikasi Lowongan</a>
+    <a class="hov active" href="{% url 'dashboard_proposal_lowongan:terverifikasi'%}">Terverifikasi</a>
+    <a class="hov r" href="{% url 'dashboard_proposal_lowongan:riwayat'%}">Riwayat</a>
+</div>
+
+<div id="main">
+    <button class="openbtn r" onclick="toggleNav()" style="background-color: transparent;">
+        <img src="{% static '/images/sidebarhamburger.png' %}" style="width: 50px; height: 50px;" alt="">
+    </button>
+    <div class="container center d e">
+        <h2 style="color: #D02E4A;text-align: center; margin-bottom: 1%;"><strong>Request Lowongan
+                Terverifikasi</strong></h2>
+    </div>
+
+    <div class="card-container d-flex justify-content-center e">
+        <div class="card top-card" style="background-color: #fff;">
+            <span style="display:flex;align-items: center;">
+                <img src="{% static '/images/waitverif.png' %}" width="20" height="22" alt="">
+                <small style="color: #F59E0B"><strong>Menunggu Verifikasi: {{unverified}}</strong></small>
+            </span>
+        </div>
+        <div class="card e" style="background-color: #fff">
+            <span style="display:flex;align-items: center;">
+                <img src="{% static '/images/verif.png' %}" width="25" height="25" alt="">
+                <small style="color:green"><strong>Terverifikasi: {{terverifikasi}}</strong></small>
+            </span>
+        </div>
+        <div class="card e" style="background-color: #fff">
+            <span style="display:flex;align-items: center;">
+                <img src="{% static '/images/tolak.png' %}" width="25" height="25" alt="">
+                <small style="color:red"><strong>Ditolak: {{tolak}}</strong></small>
+            </span>
+        </div>
+        <div class="card w" style="background-color: #fff;">
+            <span style="display:flex;align-items: center;">
+                <img src="{% static '/images/total.png' %}" width="25" height="25" alt="">
+                <small style="color: #0097EC;"><strong>Total: {{total}}</strong></small>
+            </span>
+        </div>
+    </div>
+
+    {% if msg > 0%}
+    <div class="container-fluid mt-4 ad">
+        <div class="justify-content-center ad">
+            <div class="col-auto mb-3 ad">
+                {% for lowongan, company in lowongan_with_companies %}
+                <div class="card-main ad" style="width: 48rem;box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                    <div class="card-body">
+                        {% if lowongan.status.strip|lower == 'sudah terverifikasi'%}
+                        <span class="badge rounded-pill d" style="background-color: #E6F4CE; color: #3D581B;">TERVERIFIKASI
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'buka'%}
+                        <span class="badge rounded-pill de" style="background-color: #D8F5FD; color: #1A609C;">BUKA
+                        </span>
+                        {% elif lowongan.status.strip|lower == 'tutup' %}
+                        <span class="badge rounded-pill de" style="background-color: #e3dddd; color: #6f6d6d; border: #878787 1px;">TUTUP
+                        </span>
+                        {%endif%}
+                        <h5 class="card-title c"><strong>{{company.0.name}} - {{lowongan.posisi}}</strong></h5>
+                        <p class="card-text c">
+                            {% if lowongan.deskripsi|length > 221 %}
+                        <p class="card-text c">{{ lowongan.deskripsi|slice:":221"|safe }} .......</p>
+                        {% else %}
+                        <p class="card-text c">{{lowongan.deskripsi}}</p>
+                        {% endif %}
+                        </p>
+                        <a href="{% url 'dashboard_proposal_lowongan:detail' lowongan.id %}"><strong>Lihat
+                                Lowongan</strong></a>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+    {% else%}
+    <div class="container flex msg c">
+        <p><strong>{{msg}}</strong></p>
+    </div>
+    {% endif%}
+</div>
+{% endblock%}
