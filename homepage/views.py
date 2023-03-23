@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 
-# Create your views here.
 def home(request):
     user = request.user
     return render(request, 'home.html', {'user' : user})
@@ -15,6 +15,7 @@ def login_user(request):
             login(request, user)
             return redirect('/')
         else:
+            messages.info(request, "Pastikan username dan password yang dimasukkan benar!")
             return redirect('/login/')
             
     return render(request, 'login.html')
