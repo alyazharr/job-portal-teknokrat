@@ -23,7 +23,7 @@
       
     </form>
     {% if not list_lowongan %}
-      <div class='rounded border bg-light d-flex align-items-center justify-content-center' style="min-height:350px">
+      <div class="rounded border bg-light d-flex align-items-center justify-content-center" style="min-height:350px">
         {% if request.GET.search_query != '' %}
           <div>Lowongan yang dicari tidak dapat ditemukan</div>
         {% else %}
@@ -39,19 +39,19 @@
             <div class="card-body d-flex flex-column gap-2">
               <h5 class="card-title fw-bold">{{ lowongan.posisi }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ lowongan.users_id.name }}</h6>
-              <div class='d-flex gap-2'>
+              <div class="d-flex gap-2">
                 <i class="bi bi-currency-dollar"></i>
                 <div>Rp {{ lowongan.gaji }}</div>
               </div>
-              <div class='d-flex gap-2'>
+              <div class="d-flex gap-2">
                 <i class="bi bi-clock"></i>
                 <div>Min {{ lowongan.lama_pengalaman }} tahun pengalaman</div>
               </div>
-              <div class='d-flex gap-2'>
+              <div class="d-flex gap-2">
                 <i class="bi bi-calendar2-range"></i>
                 <div>{{ lowongan.buka_lowongan }} s.d. {{ lowongan.batas_pengumpulan }}</div>
               </div>
-              <a href="#" class="align-self-start  btn bg-base-purple text-white">Lihat Lowongan</a>
+              <a href="#" class="align-self-start mt-2 mb-2 btn bg-base-red text-white">Lihat Lowongan</a>
             </div>
           </div>
         {% endfor %}
@@ -61,6 +61,7 @@
       <ul class="pagination">
         <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
           <a 
+          style='color:black;'
           class="page-link" 
           href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% endif %} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}" tabindex="-1"
           >
@@ -69,23 +70,23 @@
         </li>
       {% if page_obj.has_previous %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.previous_page_number }} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}">
+          <a style='color:black;' class="page-link" href="?page={{ page_obj.previous_page_number }} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}">
             {{ page_obj.previous_page_number }}
           </a>
         </li>
       {% endif %}
         <li class="page-item active">
-          <a class="page-link" href="?page={{ page_obj.number }} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}"> {{ page_obj.number }} </a>
+          <a style="border-color: white;" class="page-link bg-base-red" href="?page={{ page_obj.number }} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}"> {{ page_obj.number }} </a>
         </li>
         {% if page_obj.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.next_page_number }} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}">
+          <a style='color:black;' class="page-link" href="?page={{ page_obj.next_page_number }} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}">
             {{ page_obj.next_page_number }}
           </a>
         </li>
       {% endif %}
-        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
-          <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% endif %} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}">Next</a>
+        <li style='color:black;' class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+          <a style='color:black;' class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% endif %} {% if request.GET.search_query != '' %}&search_query={{request.GET.search_query}}{% endif %}">Next</a>
         </li>
       </ul>
     </nav>
