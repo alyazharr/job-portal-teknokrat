@@ -8,7 +8,7 @@ from django.db.models import Q
 class BukaLowonganFormView(UserPassesTestMixin,FormView):
     template_name = 'buka_lowongan.html'
     form_class = BukaLowonganForm
-    success_url = '/admin/jobseeker/lowongan'
+    success_url = '/list_lowongan'
     login_url = '/login/'
 
     def test_func(self):
@@ -28,7 +28,7 @@ class ListLowonganView(UserPassesTestMixin, ListView):
     ordering = ('-batas_pengumpulan',)
 
     def test_func(self):
-        return self.request.user.is_authenticated and self.request.user.role_id == 1
+        return self.request.user.is_authenticated 
 
     def get_queryset(self):
         if 'search_query' in self.request.GET and self.request.GET['search_query'] != "":

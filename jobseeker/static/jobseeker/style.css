@@ -12,3 +12,9 @@
         width: 100%;
     }
 }
+
+
+.active {
+color: #fff !important;
+background: #f00 !important;
+}

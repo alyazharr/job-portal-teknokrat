@@ -1,6 +1,7 @@
 from ..models import Lowongan,Users
 from django.test import TestCase
-from datetime import datetime, timedelta
+from datetime import  timedelta
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 class LowonganTestCase(TestCase):
@@ -10,8 +11,8 @@ class LowonganTestCase(TestCase):
         invalid_lowongan = Lowongan(
             posisi="Software Engineer",
             gaji=100000,
-            batas_pengumpulan = datetime.today() - timedelta(days=1),
-            buka_lowongan= datetime.today() 
+            batas_pengumpulan = timezone.now().date() - timedelta(days=1),
+            buka_lowongan= timezone.now().date() 
         )
 
         self.assertRaises(ValidationError, invalid_lowongan.clean)
@@ -21,8 +22,8 @@ class LowonganTestCase(TestCase):
             valid_lowongan = Lowongan(
                 posisi="Software Engineer",
                 gaji=100000,
-                batas_pengumpulan = datetime.today().date() + timedelta(days=1),
-                buka_lowongan= datetime.today().date()
+                batas_pengumpulan = timezone.now().date() + timedelta(days=1),
+                buka_lowongan= timezone.now().date()
             )
 
             valid_lowongan.clean()
@@ -34,8 +35,8 @@ class LowonganTestCase(TestCase):
         invalid_lowongan = Lowongan(
             posisi="Software Engineer",
             gaji=100000,
-            batas_pengumpulan = datetime.today().date() ,
-            buka_lowongan= datetime.today().date() - timedelta(days=1) 
+            batas_pengumpulan = timezone.now().date() ,
+            buka_lowongan= timezone.now().date() - timedelta(days=1) 
         )
 
         self.assertRaises(ValidationError, invalid_lowongan.clean)

@@ -160,11 +160,6 @@ class ListLowonganViewTestCase(TestCase):
         self.url = 'list_lowongan'  
         self.client = Client()  
 
-    def test_access_if_user_is_logged_in_as_alumni(self):
-        self.client.login(username='alumni',password='password')
-        response = self.client.get(reverse(self.url))
-        assert response.status_code == 200
-
     def test_list_lowongan_should_return_list_lowongan_template(self):
         self.client.login(username='alumni',password='password')
         response = self.client.get(reverse(self.url))
@@ -173,11 +168,6 @@ class ListLowonganViewTestCase(TestCase):
     def test_access_if_user_is_not_logged_in_should_redirect_to_login(self):
         response = self.client.get(reverse(self.url))
         assert response.status_code == 302
-
-    def test_access_if_user_logged_in_not_as_alumni_should_return_status_403(self):
-        self.client.login(username='perusahaan',password='password')
-        response = self.client.get(reverse(self.url))
-        assert response.status_code == 403
 
 
     def test_list_lowongan_should_return_sorted_by_batas_pengumpulan(self):
