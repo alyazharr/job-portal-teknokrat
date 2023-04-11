@@ -87,7 +87,7 @@
               {% if lowongan.deskripsi|length > 221 %}
             <p class="card-text de">{{ lowongan.deskripsi|slice:":221"|safe }} .......</p>
             {% else %}
-            <p class="card-text de">{{lowongan.deskripsi}}</p>
+            <p class="card-text de">{{lowongan.deskripsi | safe}}</p>
             {% endif %}
             </p>
 
