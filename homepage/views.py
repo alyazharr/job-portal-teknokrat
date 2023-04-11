@@ -4,7 +4,14 @@ from django.contrib import messages
 
 def home(request):
     user = request.user
-    return render(request, 'home.html', {'user' : user})
+    if user.is_authenticated:
+        if user.role_id == 1:
+            return render(request, 'home.html', {'user' : user})
+        elif user.role_id == 2:
+            return redirect("/dashboard-lowongan-pekerjaan")
+        elif user.role_id == 3 or user.role_id == 4:
+            return redirect("dashboard_proposal_lowongan:dashboard")
+    return render(request, 'home.html')
 
 def login_user(request):
     if request.method == 'POST':
