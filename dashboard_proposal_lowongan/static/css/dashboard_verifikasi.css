@@ -89,10 +89,17 @@ span small {
     border: none;
     text-decoration: none;
     transition: background-color 0.3s;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 70%;
+}
+
+.openbtn.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .openbtn:hover {
-    color: #D02E4A;
+    opacity: 100%;
 }
 
 #main {
