@@ -51,7 +51,7 @@
                 <i class="bi bi-calendar2-range"></i>
                 <div>{{ lowongan.buka_lowongan }} s.d. {{ lowongan.batas_pengumpulan }}</div>
               </div>
-              <a href="#" class="align-self-start mt-2 mb-2 btn bg-base-red text-white">Lihat Lowongan</a>
+              <a href="/detail_lowongan/{{ lowongan.id }}" class="align-self-start mt-2 mb-2 btn bg-base-red text-white">Lihat Lowongan</a>
             </div>
           </div>
         {% endfor %}

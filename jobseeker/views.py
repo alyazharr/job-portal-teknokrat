@@ -1,8 +1,9 @@
-from django.views.generic.edit import FormView
-from django.views.generic import ListView
+from django.views.generic.edit import FormView,FormMixin
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic import ListView,DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
-from .forms import BukaLowonganForm
-from .models import Lowongan
+from .forms import BukaLowonganForm,LamarForm
+from .models import Lowongan, Lamar, Users
 from django.db.models import Q
 
 class BukaLowonganFormView(UserPassesTestMixin,FormView):
@@ -42,3 +43,40 @@ class ListLowonganView(UserPassesTestMixin, ListView):
             self.queryset = Lowongan.objects.all()
 
         return super().get_queryset()
+    
+class DetailLowonganView(FormMixin,UserPassesTestMixin,DetailView):
+    model = Lowongan
+    form_class = LamarForm
+    template_name = 'detail_lowongan.html'
+    context_object_name = 'detail_lowongan'
+    login_url = '/login/'
+    success_url = 'list_lowongan'
+
+    
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+    
+    def lamaran_is_valid(self):
+        # check jika pengguna telah melamar
+        lowongan = Lowongan.objects.get(id=self.kwargs.get('pk'))
+        already_lamar = Lamar.objects.filter(users_id=self.request.user.id,lowongan_id=self.kwargs.get('pk')).exists()
+        return not already_lamar and lowongan.is_open
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid() and self.lamaran_is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+       
+    def get_context_data(self, **kwargs):
+        already_lamar = Lamar.objects.filter(users_id=self.request.user.id,lowongan_id=self.kwargs.get('pk')).exists()
+        if already_lamar:
+            kwargs['already_lamar'] = True
+        return super().get_context_data(**kwargs)
+
+    def test_func(self):
+        return self.request.user.is_authenticated
+

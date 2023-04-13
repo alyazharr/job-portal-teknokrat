@@ -23,6 +23,7 @@ urlpatterns = [
     path("", include('dashboard_lowongan_kerja_perusahaan.urls')),
     path("buka_lowongan/", views.BukaLowonganFormView.as_view(),name='buka_lowongan'),
     path("list_lowongan/",views.ListLowonganView.as_view(),name='list_lowongan'),
+    path("detail_lowongan/<int:pk>/", views.DetailLowonganView.as_view(),name='detail_lowongan'),
     path("dashboard-proposal-lowongan/", include("dashboard_proposal_lowongan.urls")),
 ]
 
