@@ -6,6 +6,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from ckeditor.fields import RichTextField
 from .validators import validate_after_today
+from django.utils import timezone
+
 
 class CV(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -53,21 +55,27 @@ class KabKota(models.Model):
 
 
 class Lamar(models.Model):
+    class StatusLamaran(models.TextChoices):
+        PENDING = "Pending", _("Pending")
+        DITOLAK = "Ditolak", _("Ditolak")
+        DITERIMA = "Diterima", _("Diterima")
+        
+
     id = models.BigAutoField(primary_key=True)
-    users_id = models.PositiveBigIntegerField()
-    lowongan_id = models.PositiveBigIntegerField()
-    subject = models.TextField()
-    berkas = models.CharField(max_length=255)
+    users_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    lowongan_id = models.ForeignKey('Lowongan',on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=255,
+        choices=StatusLamaran.choices,
+        default=StatusLamaran.PENDING
+    )
+    subject = models.TextField(null=True)
+    berkas = models.CharField(max_length=255,null=True)
     created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         db_table = 'lamar'
-
-
-
-
-
 
 class PasswordResets(models.Model):
     email = models.CharField(max_length=255)
@@ -200,6 +208,10 @@ class Lowongan(models.Model):
     batas_pengumpulan = models.DateField()
     created_at = models.DateTimeField(blank=True, null=True, auto_now=True)
     updated_at = models.DateTimeField(blank=True, null=True,auto_now=True)
+
+    @property
+    def is_open(self):
+        return self.status == self.StatusLowongan.OPEN
 
     def clean(self):
         if self.batas_pengumpulan <= self.buka_lowongan:

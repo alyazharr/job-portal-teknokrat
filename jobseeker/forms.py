@@ -1,6 +1,11 @@
-from .models import Lowongan
+from .models import Lowongan,Lamar
 from django.forms import ModelForm, DateInput, TextInput, Textarea
 from django.utils.translation import gettext_lazy as _
+
+class LamarForm(ModelForm):
+    class Meta:
+        model = Lamar
+        fields=["users_id", "lowongan_id"]
 
 class BukaLowonganForm(ModelForm):
     class Meta:

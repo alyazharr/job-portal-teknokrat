@@ -1,10 +1,11 @@
 from django.test import TestCase
 from django.test import Client
-from ..models import Users, Lowongan
+from ..models import Users, Lowongan,Lamar
 from datetime import datetime, timedelta
 from django.urls import reverse
 import json
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 class BukaLowonganViews(TestCase):
     
@@ -216,3 +217,115 @@ class ListLowonganViewTestCase(TestCase):
         
         for lowongan in list_lowongan:
             assert lowongan.status == 'Buka'
+
+class DetailLowonganTestCase(TestCase):
+
+    def setUp(self):
+
+        # set up alumni data
+        self.alumni = Users.objects.create (
+            username="alumni",
+            password="password",
+            npm=1,
+            prodi_id=1,
+            role_id=1
+        )
+
+        # set up perusahaan data
+        self.perusahaan = Users.objects.create (
+            username="perusahaan",
+            password="password",
+            npm=2,
+            prodi_id=2,
+            role_id=2
+        )
+
+        # set up lowongan data
+        self.lowongan = Lowongan.objects.create(
+                users_id=self.perusahaan,
+                posisi="Software engineer",
+                status="Buka",
+                lama_pengalaman=10,
+                gaji=100,
+                buka_lowongan=timezone.now().date(),
+                batas_pengumpulan=timezone.now().date() + timedelta(days=1),
+            )
+
+
+        self.url = f'detail_lowongan'
+        self.client = Client()
+
+    def test_unauthenticated_user_should_redirect_to_login(self):
+        response = self.client.get(reverse(self.url,args=[ self.lowongan.id ]))
+        self.assertEqual(response.status_code, 302)
+
+    def test_lamar_object_should_not_be_created_if_lowongan_not_open(self):
+        closed_lowongan = Lowongan.objects.create(
+                users_id=self.perusahaan,
+                posisi="Software engineer",
+                status="Tutup",
+                lama_pengalaman=10,
+                gaji=100,
+                buka_lowongan=timezone.now().date(),
+                batas_pengumpulan=timezone.now().date() + timedelta(days=1),    
+        )
+        self.client.login(username='alumni',password='password')
+        response = self.client.post(
+            reverse(self.url,args=[ closed_lowongan.id ]),
+            {
+                "users_id" : self.alumni.id,
+                "lowongan_id" : closed_lowongan.id
+            }
+        )
+         
+        self.assertRaises(ObjectDoesNotExist, Lamar.objects.get,users_id=self.alumni.id,lowongan_id=closed_lowongan.id)
+
+    def test_lamar_object_should_be_created_if_user_lamar(self):
+        self.client.login(username='alumni',password='password')
+        response = self.client.post(
+            reverse(self.url,args=[ self.lowongan.id ]),
+            {
+                "users_id" : self.alumni.id,
+                "lowongan_id" : self.lowongan.id
+            }
+        )
+        created_lamar = Lamar.objects.get(users_id=self.alumni.id,lowongan_id=self.lowongan.id)
+        self.assertIsNotNone(created_lamar)
+
+    def test_lamar_object_should_only_be_created_once_if_user_already_lamar(self):
+        self.client.login(username='alumni',password='password')
+        self.client.post(
+            reverse(self.url,args=[ self.lowongan.id ]),
+            {
+                "users_id" : self.alumni.id,
+                "lowongan_id" : self.lowongan.id
+            }
+        )
+        self.client.post(
+            reverse(self.url,args=[ self.lowongan.id ]),
+            {
+                "users_id" : self.alumni.id,
+                "lowongan_id" : self.lowongan.id
+            }
+        )
+        total_created_lamar =  Lamar.objects.filter(users_id=self.alumni.id, lowongan_id=self.lowongan.id).count()
+        self.assertEqual(total_created_lamar,1)
+
+    
+    def test_detail_lowongan_should_return_detail_lowongan_template(self):
+        self.client.login(username='alumni',password='password')
+        response = self.client.get(reverse(self.url,args=[ self.lowongan.id ]))
+        self.assertTemplateUsed(response, 'detail_lowongan.html')
+    
+    # negative test for lowongan availability
+    def test_detail_lowongan_should_return_404_if_lowongan_does_not_exist(self):
+        self.client.login(username='alumni',password='password')
+        response = self.client.get(reverse(self.url,args=[ 2 ]))
+        self.assertEqual(response.status_code, 404)
+    
+    # positive test for lowongan availability
+    def test_detail_lowongan_should_return_lowongan_by_pk(self):
+        self.client.login(username='alumni',password='password')
+        response = self.client.get(reverse(self.url,args=[ self.lowongan.id ]))
+        detail_lowongan = response.context['detail_lowongan']
+        self.assertEqual(self.lowongan, detail_lowongan)
