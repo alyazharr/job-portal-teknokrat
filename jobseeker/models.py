@@ -71,7 +71,7 @@ class Lamar(models.Model):
     )
     subject = models.TextField(null=True)
     berkas = models.CharField(max_length=255,null=True)
-    created_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True, auto_now=True)
     updated_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:

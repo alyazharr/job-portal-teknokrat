@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Dashboard Proposal Lowongan</title>
+<link rel="stylesheet" href="{% static 'css/riwayat.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+<style>
+    table tbody:nth-child(odd) {
+        background-color: #D1D5DB;
+    }
+
+    table tbody:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    .table thead {
+        background-color: #D1D5DB;
+        font-size: 17px;
+
+    }
+
+    .table td {
+        padding: 20px;
+        font-size: 17px;
+    }
+</style>
+{% endblock meta %}
+
+{% block script %}
+<script>
+    $('#sortTable').DataTable();
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+{% endblock script %}
+
+{% block content %}
+
+<div id="main">
+    <div class="container center" style="margin-top: 2%;">
+        <h2 style="color: #D02E4A;text-align: center; margin-bottom: 1%;"><strong>Riwayat Lamaran Pekerjaan</strong>
+        </h2>
+    </div>
+
+    <div class="card-container d-flex justify-content-center">
+        <div class="card top-card gh" style="background-color: #fff;">
+            <span style="display:flex;align-items: center;">
+                <img src="{% static '/images/total.png' %}" width="25" height="25" alt="">
+                <small style="color: #0097EC;"><strong>Total Lamaran: {{total}}</strong></small><br>
+            </span>
+        </div>
+        <div class="card gh" style="background-color: #fff;">
+            <span style="display:flex;align-items: center;">
+                <img src="{% static '/images/waitverif.png' %}" width="20" height="22" alt="">
+                <small style="color: #F59E0B"><strong>Melamar: {{pending}}</strong></small><br>
+            </span>
+        </div>
+        <div class="card gh" style="background-color: #fff">
+            <span style="display:flex;align-items: center;">
+                <img src="{% static '/images/verif.png' %}" width="25" height="25" alt="">
+                <small style="color:green"><strong>Diterima: {{diterima}}</strong></small><br>
+            </span>
+        </div>
+        <div class="card gh" style="background-color: #fff">
+            <span style="display:flex;align-items: center;">
+                <img src="{% static '/images/tolak.png' %}" width="25" height="25" alt="">
+                <small style="color:red"><strong>Ditolak: {{ditolak}}</strong></small><br>
+            </span>
+        </div>
+    </div>
+
+    <div style="margin: 10px;"></div>
+    <div class="text-center">
+        <br>
+        <div class="container center">
+            {% if total > 0%}
+            <table class="table table-borderless" id="sortTable" aria-describedby="Daftar Riwayat Lamaran">
+                <thead>
+                    <tr>
+                        <th scope="col">Posisi</th>
+                        <th scope="col">Perusahaan</th>
+                        <th scope="col">Status Lamaran</th>
+                        <th scope="col">Status Lowongan</th>
+                        <th scope="col">Tanggal Melamar</th>
+                        <th scope="col">Detail</th>
+                    </tr>
+                </thead>
+
+                {% if lamaran_lowongan_company %}
+                {% for lamaran, lowongan, company in lamaran_lowongan_company %}
+                <tbody>
+                    <tr>
+                        <td>{{ lowongan.posisi }}</td>
+                        <td>{{ company.0.name|title }}</td>
+                        {% if lamaran.status.strip|lower == 'pending'%}
+                        <td>
+                            <span class="badge rounded-pill jj" style="background-color: #FEEEC9;color: #845124;">
+                                Melamar
+                        </td>
+                        {% elif lamaran.status.strip|lower == 'ditolak'%}
+                        <td>
+                            <span class="badge rounded-pill jj" style="background-color: #FEEBED; color: #9D3B48;">
+                                Ditolak
+                        </td>
+                        {% elif lamaran.status.strip|lower == 'diterima'%}
+                        <td>
+                            <span class="badge rounded-pill jj" style="background-color: #E6F4CE; color: #3D581B;">
+                                Diterima
+                        </td>
+                        {% endif%}
+
+                        {% if lowongan.status.strip|lower == 'buka' %}
+                        <td style="color:green;font-size: 17px;"><strong>{{lowongan.status}}</strong></td>
+                        {% else %}
+                        <td style="color:#D02E4A;font-size: 17px;"><strong>{{lowongan.status}}</strong></td>
+                        {% endif %}
+                        <td>{{ lamaran.created_at }}</td>
+                        <td>
+                            <a href="/detail_lowongan/{{ lowongan.id }}">
+                                <button class="btn btn-red" style="font-size: 15px;">
+                                    Lihat Detail
+                                </button>
+                        </td>
+                        </a>
+                    </tr>
+                </tbody>
+                {% endfor %}
+                {% endif %}
+
+            </table>
+            {% else %}
+
+            <div class="container flex" style="background-color: #D8F5FD;color: #1A609C;padding-top:3px; padding-bottom:3px;">
+                <p><strong>{{msg}}</strong></p>
+            </div>
+
+            {% endif%}
+        </div>      
+        <br>
+    </div>
+</div>
+
+{% endblock%}
