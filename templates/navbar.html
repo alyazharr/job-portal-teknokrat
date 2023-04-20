@@ -24,6 +24,11 @@
                     <a href="{% url 'dashboard_proposal_lowongan:dashboard' %}" class="nav-link">Verifikasi Lowongan</a>
                 </li>
                 {% endif %}
+                {% if request.user.role_id == 1%}
+                <li class="nav-item">
+                    <a href="{% url 'cv:riwayat-lamaran' %}" class="nav-link">Riwayat Lamaran</a>
+                </li>
+                {% endif %}
             </ul>
 
             <div class="d-flex flex-column align-items-end">
