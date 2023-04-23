@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.shortcuts import render, redirect
 from jobseeker.models import Lowongan
 from django.contrib.auth.decorators import login_required
+from datetime import date
 
 
 global HOMEPAGE_LOGIN
@@ -46,8 +47,6 @@ def ubah_status(request,id):
         return redirect(HOMEPAGE_LOGIN) 
     if lowongan.status =='Buka':
         lowongan.status = "Tutup"
-    else:
-         lowongan.status = "Buka"
     lowongan.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
