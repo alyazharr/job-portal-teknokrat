@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from jobseeker.models import CV, Lamar, Lowongan, Users
 from django.contrib import messages
+from cv.forms import UserForm, CVForm
 
 HOMEPAGE_LOGIN = 'homepage:login'
 MSG_NO_AUTHORIZED = 'Anda tidak memiliki akses ke laman ini. Silakan login sebagai Admin.'
@@ -15,6 +16,47 @@ def profile(request):
         'cv': cv
     }
     return render(request, 'profile.html', context)
+
+@login_required(login_url='/login/')
+def resume(request, username):
+    user = Users.objects.filter(username=username).first()
+    cv = CV.objects.filter(users_id=user.id).first()
+    context = {
+        'user': user,
+        'cv': cv
+    }
+    return render(request, 'resume.html', context)
+
+@login_required(login_url='/login/')
+def edit_resume(request):
+    if request.method == 'GET':
+        user = request.user
+        cv = CV.objects.filter(users_id=user.id).first()
+        print(user.tgl_lahir)
+        user_form = UserForm(instance=user, initial={'tgl_lahir': user.tgl_lahir.strftime('%Y-%m-%d') if user.tgl_lahir else '',})
+        cv_form = CVForm(instance=cv)
+        context = {
+            'user_form': user_form,
+            'cv_form': cv_form
+        }
+        return render(request, 'edit_resume.html', context)
+    if request.method == 'POST':
+        user = request.user
+        cv = CV.objects.filter(users_id=user.id).first()
+        user_form = UserForm(request.POST, instance=user)
+        cv_form = CVForm(request.POST, request.FILES, instance=cv)
+        if user_form.is_valid() and cv_form.is_valid():
+            user_form.save()
+            cv_form.save()
+            messages.success(request, 'CV berhasil diperbarui.')
+            return redirect('cv:resume' , username=user.username)
+        else:
+            messages.error(request, 'CV gagal diperbarui.')
+            context = {
+                'user_form': user_form,
+                'cv_form': cv_form
+            }
+            return render(request, 'edit_resume.html', context)
 
 @login_required(login_url='/login/')
 def riwayat_lamaran(request):
