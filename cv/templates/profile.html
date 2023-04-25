@@ -72,7 +72,7 @@
             </div>
             {% if request.user.role_id == 1 %}
             <div>
-                <a href="" class="btn primary-btn bg-base-red mt-3">
+                <a href="/resume/{{request.user.username}}" class="btn primary-btn bg-base-red mt-3">
                         <img src="{% static '/images/mail_icon.png' %}" style="padding: 0 0.5rem 0 0" alt="mail_icon">
                         <span class="subheader-2">Lihat CV</span>
                 </a>

@@ -53,6 +53,24 @@ body {
     filter: brightness(90%);
 }
 
+.secondary-btn {
+    background: transparent;
+    border: 2px solid #991B1B;
+    align-items: flex-start;
+    padding: 7px 12px 7px 12px;
+    gap: 8px;
+    color: #991B1B;
+}
+.secondary-btn:hover {
+    background: transparent;
+    border: 2px solid #de2b2b;
+    align-items: flex-start;
+    padding: 7px 12px 7px 12px;
+    gap: 8px;
+    text-decoration: none;
+    color: #de2b2b;
+}
+
 .nav-link {
     font-weight: 600;
     font-size: 16px;
