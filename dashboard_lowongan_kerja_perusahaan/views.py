@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.shortcuts import render, redirect
-from jobseeker.models import Lowongan
+from jobseeker.models import Lowongan,Lamar
 from django.contrib.auth.decorators import login_required
 from datetime import date
 
@@ -49,6 +49,40 @@ def ubah_status(request,id):
         lowongan.status = "Tutup"
     lowongan.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required(login_url=HOMEPAGE_LOGIN)
+def pelamar_lowongan(request,id):
+    user = request.user
+    if (user.role_id == 2):
+        lowongan = Lowongan.objects.get(id=id)
+        data = Lamar.objects.filter(lowongan_id=lowongan)
+    else:
+        return redirect(HOMEPAGE_LOGIN) 
+    return render(request, 'dashboard_pelamar.html', {'pelamar': data,'lowongan':lowongan})
+
+login_required(login_url=HOMEPAGE_LOGIN)
+def terima_pelamar(request,id):
+    user = request.user
+    if (user.role_id == 2):
+        lamaran = Lamar.objects.get(id=id)
+        lamaran.status ="Diterima"
+        lamaran.save()
+    else:
+        return redirect(HOMEPAGE_LOGIN) 
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+login_required(login_url=HOMEPAGE_LOGIN)
+def tolak_pelamar(request,id):
+    user = request.user
+    if (user.role_id == 2):
+        lamaran = Lamar.objects.get(id=id)
+        lamaran.status ="Ditolak"
+        lamaran.save()
+    else:
+        return redirect(HOMEPAGE_LOGIN) 
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+    
 
     
 

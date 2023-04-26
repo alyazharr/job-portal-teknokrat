@@ -99,13 +99,17 @@
               <td>{{pelamar.users_id.name}}</td>
               <td>{{pelamar.created_at}}</td>
               <td>{{pelamar.status}}</td>
-              <td><button class="btn btn-read">Profile</button></td>
+              <td>
+                <form action="{% url 'cv:resume' pelamar.users_id.username %}" method="GET">
+                    <button class="btn btn-read">Resume</button>
+                </form>
+              </td>
               <td  class="action">
       
-                    <form action="{% url 'ubah_status' pelamar.id %}" method="GET">
+                    <form action="{% url 'terima_pelamar' pelamar.id %}" method="GET">
                         <button class="btn btn-outline-success " type="submit">Terima</button>
                     </form>
-                    <form action="{% url 'ubah_status' pelamar.id %}" method="GET">
+                    <form action="{% url 'tolak_pelamar' pelamar.id %}" method="GET">
                         <button class="btn btn-outline-danger " type="submit">Tolak</button>
                     </form>
        
