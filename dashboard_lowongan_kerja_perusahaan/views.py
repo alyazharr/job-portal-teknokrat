@@ -57,9 +57,12 @@ def pelamar_lowongan(request,id):
     if (user.role_id == 2):
         lowongan = Lowongan.objects.get(id=id)
         data = Lamar.objects.filter(lowongan_id=lowongan)
+        total_pelamar = data.count()
+        pelamar_diterima = Lamar.objects.filter(status='Diterima').count()
+        pelamar_ditolak = Lamar.objects.filter(status='Ditolak').count()
     else:
         return redirect(HOMEPAGE_LOGIN) 
-    return render(request, 'dashboard_pelamar.html', {'pelamar': data,'lowongan':lowongan})
+    return render(request, 'dashboard_pelamar.html', {'pelamar': data,'lowongan':lowongan,'total_pelamar':total_pelamar,'pelamar_diterima':pelamar_diterima,'pelamar_ditolak':pelamar_ditolak})
 
 login_required(login_url=HOMEPAGE_LOGIN)
 def terima_pelamar(request,id):

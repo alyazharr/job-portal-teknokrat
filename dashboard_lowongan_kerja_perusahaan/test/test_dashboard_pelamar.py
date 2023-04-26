@@ -67,6 +67,7 @@ class PelamarLowonganTestCase(TestCase):
         self.client.login(username='perusahaan', password='password')
         response = self.client.get(reverse('pelamar_lowongan', args=[self.lowongan.id]))
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['total_pelamar'], 2)
         self.assertTemplateUsed(response, 'dashboard_pelamar.html')
 
     def test_pelamar_lowongan_with_unauthenticated_user(self):
@@ -100,3 +101,14 @@ class PelamarLowonganTestCase(TestCase):
         response = self.client.get(reverse('tolak_pelamar', args=[self.lamaran2.id]))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse(LOGIN)) 
+
+    def test_count_pelamar(self):
+        self.client.login(username='perusahaan', password='password')
+        self.client.get(reverse('terima_pelamar', args=[self.lamaran1.id]))
+        self.lamaran1.refresh_from_db()
+        self.client.get(reverse('tolak_pelamar', args=[self.lamaran2.id]))
+        self.lamaran2.refresh_from_db()
+        response = self.client.get(reverse('pelamar_lowongan', args=[self.lowongan.id]))
+        self.assertEqual(response.context['total_pelamar'], 2)
+        self.assertEqual(response.context['pelamar_diterima'], 1)
+        self.assertEqual(response.context['pelamar_ditolak'], 1)
