@@ -50,11 +50,13 @@
 
 <div style="margin: 30px;">
   <div class="container center">
+    <div class="d-flex justify-content-between">
       <h3 style="color: #D02E4A;"><b>Riwayat Lowongan</b></h3>
-  
+      <a class="btn btn-add" href="{% url 'buka_lowongan' %}">Tambah Lowongan</a>
+    </div>
 
 
-    <div style="display:flex; gap:10px;"}>
+    <div style="display:flex; gap:10px;">
 
       <div class="card gh" style="background-color: #fff;">
         <span style="display:flex;align-items: center;">
@@ -114,7 +116,7 @@
                 {% endif %}
                 </form>
               </td>
-              <td><button class="btn btn-outline-primary">Edit</button></td>
+              <td><a class="btn btn-outline-primary" href="{% url 'edit-lowongan' lowongan.id %}">Edit</a></td>
             </tr>
           </tbody>
           {%endfor%}

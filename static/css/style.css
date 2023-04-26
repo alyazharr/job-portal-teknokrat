@@ -19,6 +19,11 @@ body {
     border-radius: 4px;
 }
 
+.bg-base-blue {
+    background: linear-gradient(111.75deg, #0097EC 0%, #0068A3 100%);
+    border-radius: 4px;
+}
+
 .bg-base-purple {
     background-color: #3633C6;
 }

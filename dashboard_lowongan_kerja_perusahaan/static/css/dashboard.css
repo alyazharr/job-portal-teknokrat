@@ -221,6 +221,12 @@ a span:hover {
     background-image: linear-gradient(to right, #EF4444, #991B1B);
 }
 
+.btn-add{
+    color: white;
+    background: linear-gradient(111.75deg, #0097EC 0%, #0068A3 100%);
+    border-radius: 4px;
+}
+
 .btn-outline-submit{
     color: #0097EC;
     border-color: #0097EC;

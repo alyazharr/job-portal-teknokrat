@@ -1,16 +1,17 @@
-from django.views.generic.edit import FormView,FormMixin
-from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.edit import FormView, FormMixin, UpdateView
 from django.views.generic import ListView,DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
 from .forms import BukaLowonganForm,LamarForm
-from .models import Lowongan, Lamar, Users
+from .models import Lowongan, Lamar
 from django.db.models import Q
+
+LOGINURL = '/login/'
 
 class BukaLowonganFormView(UserPassesTestMixin,FormView):
     template_name = 'buka_lowongan.html'
     form_class = BukaLowonganForm
-    success_url = '/list_lowongan'
-    login_url = '/login/'
+    success_url = '/dashboard-lowongan-pekerjaan'
+    login_url = LOGINURL
 
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.role_id == 2
@@ -19,13 +20,23 @@ class BukaLowonganFormView(UserPassesTestMixin,FormView):
         form.instance.users_id = self.request.user
         form.save()
         return super().form_valid(form)
+    
+class EditLowonganFormView(UserPassesTestMixin,UpdateView):
+    template_name = 'buka_lowongan.html'
+    model = Lowongan
+    form_class = BukaLowonganForm
+    success_url = '/dashboard-lowongan-pekerjaan'
+    login_url = LOGINURL
+
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.role_id == 2
 
 class ListLowonganView(UserPassesTestMixin, ListView):
     model = Lowongan
     context_object_name = 'list_lowongan'
     template_name = 'list_lowongan.html'
     paginate_by = 10
-    login_url = '/login/'
+    login_url = LOGINURL
     ordering = ('-batas_pengumpulan',)
 
     def test_func(self):
@@ -49,7 +60,7 @@ class DetailLowonganView(FormMixin,UserPassesTestMixin,DetailView):
     form_class = LamarForm
     template_name = 'detail_lowongan.html'
     context_object_name = 'detail_lowongan'
-    login_url = '/login/'
+    login_url = LOGINURL
     success_url = 'list_lowongan'
 
     
