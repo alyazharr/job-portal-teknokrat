@@ -43,18 +43,11 @@ class ListLowonganView(UserPassesTestMixin, ListView):
         return self.request.user.is_authenticated 
 
     def get_queryset(self):
-        if 'search_query' in self.request.GET and self.request.GET['search_query'] != "":
-            self.queryset = Lowongan.objects.filter(
-                (
-                    Q(posisi__icontains=self.request.GET['search_query']) |
-                    Q(users_id__name__icontains=self.request.GET['search_query'])
-                )
-            )
-        else:
-            self.queryset = Lowongan.objects.all()
+        if self.request.GET.get('search_query',""):
+            return super().get_queryset().search(self.request.GET['search_query'])
+        
+        return super().get_queryset().all_open_lowongan()
 
-        return super().get_queryset()
-    
 class DetailLowonganView(FormMixin,UserPassesTestMixin,DetailView):
     model = Lowongan
     form_class = LamarForm

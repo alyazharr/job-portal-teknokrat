@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import UsersManager
+from .queryset import LowonganQuerySet
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -208,6 +209,8 @@ class Lowongan(models.Model):
     batas_pengumpulan = models.DateField()
     created_at = models.DateTimeField(blank=True, null=True, auto_now=True)
     updated_at = models.DateTimeField(blank=True, null=True,auto_now=True)
+
+    objects = LowonganQuerySet.as_manager()
 
     @property
     def is_open(self):
