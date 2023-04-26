@@ -104,7 +104,10 @@
               {% else %}
               <td style="color:#D02E4A;"><b>{{lowongan.status}}</b></td>
               {% endif %}
-              <td><button class="btn btn-read">Preview</button></td>
+              <td>
+                <form action="{% url 'pelamar_lowongan' lowongan.id %}" method="GET">
+                  <button class="btn btn-read">Preview</button></td>
+                </form>
               <td>
                 <form action="{% url 'ubah_status' lowongan.id %}" method="GET">
                 {% if lowongan.status == 'Buka' %}
