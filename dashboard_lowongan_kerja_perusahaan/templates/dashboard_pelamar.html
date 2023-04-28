@@ -39,17 +39,7 @@
 
 {% block content %}
 
-<div id="mySidebar" class="sidebar gh">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-  <a class="hov active" href="{% url 'dashboard-lowongan-pekerjaan'%}">Dashboard Perusahaan</a>
-  <a class="hov gh" href="{% url 'lowongan-dibuka'%}">Lowongan Dibuka</a>
-  <a class="hov gh" href="{% url 'lowongan-ditutup'%}">Lowongan Ditutup</a>
-</div>
-
 <div id="main">
-  <button class="openbtn gh" onclick="toggleNav()" style="background-color: transparent;">
-    <img src="{% static '/images/sidebarhamburger.png' %}" style="width: 50px; height: 50px;" alt="">
-  </button>
 <div style="margin: 30px;">
   <div class="container center">
       <h3 style="color: #393838;"><b>{{lowongan.posisi}}</b></h3>
