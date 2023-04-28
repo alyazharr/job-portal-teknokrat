@@ -1,0 +1,7 @@
+Dockerfile
+.git
+.gitignore
+.gitlab-ci.yml
+cloudbuild.yaml
+.coverage
+alumnite_.sql
