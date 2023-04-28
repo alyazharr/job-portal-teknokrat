@@ -71,6 +71,9 @@ DEBUG = not PRODUCTION
 
 ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.herokuapp.com'] if PRODUCTION else ["*"]
 
+ALLOWED_HOSTS.append('ppl-teknokrat-yumdgny25a-as.a.run.app')
+CSRF_TRUSTED_ORIGINS = ['https://ppl-teknokrat-yumdgny25a-as.a.run.app']
+
 # Application definition
 
 INSTALLED_APPS = [
