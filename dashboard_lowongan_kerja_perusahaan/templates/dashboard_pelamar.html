@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Dashboard Perusahaan</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<style>
+  table tbody:nth-child(odd) {
+    background-color: #D1D5DB;
+  }
+  table tbody:nth-child(even) {
+    background-color: #ffffff;
+  }
+
+  .table thead{
+    background-color: #D1D5DB;
+
+  }
+  .table td {
+  padding: 20px;
+  }
+
+  .action{
+    display:inline-flex;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+</style>
+
+{% endblock meta %}
+
+{% block script %}
+<script src="/static/script/sidebar.js"></script>
+{% endblock script %}
+
+
+{% block content %}
+
+<div id="main">
+<div style="margin: 30px;">
+  <div class="container center">
+      <h3 style="color: #393838;"><b>{{lowongan.posisi}}</b></h3>
+
+    <div style="display:flex; gap:10px;"}>
+
+      <div class="card gh" style="background-color: #fff;">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/total.png' %}" width="25" height="25" alt="">
+          <small style="color: #0097EC;"><strong>Pelamar: {{total_pelamar}}</strong></small><br>
+        </span>
+      </div>
+
+      <div class="card gh" style="background-color: #fff">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/verif.png' %}" width="25" height="25" alt="">
+          <small style="color:green"><strong>Diterima: {{pelamar_diterima}}</strong></small><br>
+        </span>
+      </div>
+
+      <div class="card gh" style="background-color: #fff">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/tolak.png' %}" width="25" height="25" alt="">
+          <small style="color:red"><strong>Ditolak: {{pelamar_ditolak}}</strong></small><br>
+        </span>
+      </div>
+    </div>
+  </div>  
+
+  <div style="margin: 10px;"></div>
+  <div class="text-center">
+    <br>
+    <div class="container center">
+      <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">Nama</th>
+              <th scope="col">Tanggal Daftar</th>
+              <th scope="col">Status</th>
+              <th scope="col">Pelamar</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          {% for pelamar in pelamar %}
+          <tbody>
+            <tr>
+              <td>{{pelamar.users_id.name}}</td>
+              <td>{{pelamar.created_at}}</td>
+              <td>{{pelamar.status}}</td>
+              <td>
+                <form action="{% url 'cv:resume' pelamar.users_id.username %}" method="GET">
+                    <button class="btn btn-read">Resume</button>
+                </form>
+              </td>
+              <td  class="action">
+      
+                    <form action="{% url 'terima_pelamar' pelamar.id %}" method="GET">
+                        <button class="btn btn-outline-success " type="submit">Terima</button>
+                    </form>
+                    <form action="{% url 'tolak_pelamar' pelamar.id %}" method="GET">
+                        <button class="btn btn-outline-danger " type="submit">Tolak</button>
+                    </form>
+       
+              </td>
+            </tr>
+          </tbody>
+          {%endfor%}
+        </table>
+  </div>
+    <br>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+
+
+{% endblock content %}

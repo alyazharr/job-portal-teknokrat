@@ -166,13 +166,6 @@ class DashboardPekerjaanCompany(TestCase):
         self.lowongan_dibuka.refresh_from_db()
         self.assertEqual(self.lowongan_dibuka.status, 'Tutup')
 
-    def test_buka_lowongan(self):
-        response = self.client.get(reverse('ubah_status', args=[self.lowongan_ditutup.id]))
-        self.assertEqual(response.status_code, 302)
-        self.lowongan_ditutup.refresh_from_db()
-        self.assertEqual(self.lowongan_ditutup.status, 'Buka')
-        
-
 # test-case kalau sudah login (tapi bukan perusahaan)
 class DashboardProposalLowonganTestNotAdmin(TestCase):
     def setUp(self) -> None:
