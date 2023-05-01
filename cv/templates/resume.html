@@ -8,6 +8,9 @@
 {% block content %}
 
 <div class="d-flex flex-wrap justify-content-center mt-4" style="margin: 0 2.5rem 0 2.5rem;">
+    {% if message %}
+    <h5>{{ message }}</h5>
+    {% else %}
     <div class="mt-5">
         {% if user.image == 'default.png' %}
         <img src="{% static '/images/default.png' %}" style="width:13rem" alt="image">
@@ -91,5 +94,6 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock content %}

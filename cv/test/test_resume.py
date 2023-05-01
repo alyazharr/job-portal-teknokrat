@@ -99,3 +99,10 @@ class ResumeTestCase(unittest.TestCase):
         url = reverse(self.CV_RESUME, kwargs={"username":"penjahat"})
         response = client.get(url)
         self.assertEquals(response.context['user'].username, "penjahat")
+
+    def test_resume_on_render_should_return_message(self):
+        client = Client()
+        client.login(username="pengguna1",password="password")
+        url = reverse(self.CV_RESUME, kwargs={"username":"pengguna3"})
+        response = client.get(url)
+        self.assertEquals(response.context['message'], "User tidak ditemukan.")
