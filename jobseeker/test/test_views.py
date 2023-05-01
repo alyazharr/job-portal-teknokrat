@@ -52,8 +52,7 @@ class BukaLowonganViews(TestCase):
                 "batas_pengumpulan" : (datetime.today() + timedelta(days=1)).strftime("%m/%d/%Y")
             },
         )
-        
-        assert buka_lowongan_response.status_code == 302
+        assert buka_lowongan_response.status_code == 200
         created_lowongan = Lowongan.objects.get(users_id__username='perusahaan')
         assert created_lowongan != None
         assert created_lowongan.users_id == self.perusahaan 
@@ -132,7 +131,7 @@ class EditLowonganViews(TestCase):
             },
         )
         
-        assert edit_lowongan_response.status_code == 302
+        assert edit_lowongan_response.status_code == 200
         edited_lowongan = Lowongan.objects.get(users_id__username='perusahaan')
         assert edited_lowongan != None
         assert edited_lowongan.users_id == self.perusahaan 

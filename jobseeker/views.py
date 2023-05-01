@@ -10,7 +10,7 @@ LOGINURL = '/login/'
 class BukaLowonganFormView(UserPassesTestMixin,FormView):
     template_name = 'buka_lowongan.html'
     form_class = BukaLowonganForm
-    success_url = '/dashboard-lowongan-pekerjaan'
+    success_url = '/dashboard-lowongan-pekerjaan/'
     login_url = LOGINURL
 
     def test_func(self):
@@ -25,7 +25,7 @@ class EditLowonganFormView(UserPassesTestMixin,UpdateView):
     template_name = 'buka_lowongan.html'
     model = Lowongan
     form_class = BukaLowonganForm
-    success_url = '/dashboard-lowongan-pekerjaan'
+    success_url = '/dashboard-lowongan-pekerjaan/'
     login_url = LOGINURL
 
     def test_func(self):
@@ -54,7 +54,7 @@ class DetailLowonganView(FormMixin,UserPassesTestMixin,DetailView):
     template_name = 'detail_lowongan.html'
     context_object_name = 'detail_lowongan'
     login_url = LOGINURL
-    success_url = 'list_lowongan'
+    success_url = '/list_lowongan/'
 
     
     def form_valid(self, form):
