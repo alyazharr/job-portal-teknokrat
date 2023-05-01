@@ -20,6 +20,9 @@ def profile(request):
 @login_required(login_url='/login/')
 def resume(request, username):
     user = Users.objects.filter(username=username).first()
+    if not user:
+        context = {'message': 'User tidak ditemukan.'}
+        return render(request, 'resume.html', context)
     cv = CV.objects.filter(users_id=user.id).first()
     context = {
         'user': user,
