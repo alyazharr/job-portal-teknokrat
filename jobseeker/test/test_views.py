@@ -47,12 +47,12 @@ class BukaLowonganViews(TestCase):
                 "gaji" : 10000,
                 "lama_pengalaman" : 10,
                 "deskripsi" : "Developer react",
-                "requirements" : json.dumps(["s1"]),
-                "buka_lowongan" : datetime.today().strftime("%m/%d/%Y"),
-                "batas_pengumpulan" : (datetime.today() + timedelta(days=1)).strftime("%m/%d/%Y")
-            },
+                "requirements" : "asda",
+                "buka_lowongan" : timezone.now().date(),
+                "batas_pengumpulan" : timezone.now().date() + timedelta(days=1)
+            }
         )
-        assert buka_lowongan_response.status_code == 200
+        assert buka_lowongan_response.status_code == 302
         created_lowongan = Lowongan.objects.get(users_id__username='perusahaan')
         assert created_lowongan != None
         assert created_lowongan.users_id == self.perusahaan 
@@ -68,8 +68,8 @@ class BukaLowonganViews(TestCase):
                 "lama_pengalaman" : 10,
                 "deskripsi" : "Developer react",
                 "requirements" : json.dumps(["s1"]),
-                "buka_lowongan" : datetime.today().strftime("%m/%d/%Y"),
-                "batas_pengumpulan" : (datetime.today() + timedelta(days=1)).strftime("%m/%d/%Y")
+                "buka_lowongan" : timezone.now().date(),
+                "batas_pengumpulan" : timezone.now().date() + timedelta(days=1)
             },
         )
         
@@ -126,12 +126,12 @@ class EditLowonganViews(TestCase):
                 "lama_pengalaman" : 5,
                 "deskripsi" : "Backend Developer",
                 "requirements" : json.dumps(["s1"]),
-                "buka_lowongan" : datetime.today().strftime("%m/%d/%Y"),
-                "batas_pengumpulan" : (datetime.today() + timedelta(days=1)).strftime("%m/%d/%Y")
+                "buka_lowongan" : timezone.now().date(),
+                "batas_pengumpulan" : timezone.now().date() + timedelta(days=1)
             },
         )
         
-        assert edit_lowongan_response.status_code == 200
+        assert edit_lowongan_response.status_code == 302
         edited_lowongan = Lowongan.objects.get(users_id__username='perusahaan')
         assert edited_lowongan != None
         assert edited_lowongan.users_id == self.perusahaan 

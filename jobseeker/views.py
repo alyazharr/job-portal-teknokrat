@@ -54,7 +54,7 @@ class DetailLowonganView(FormMixin,UserPassesTestMixin,DetailView):
     template_name = 'detail_lowongan.html'
     context_object_name = 'detail_lowongan'
     login_url = LOGINURL
-    success_url = '/list_lowongan/'
+    success_url = '/riwayat-lamaran/'
 
     
     def form_valid(self, form):
