@@ -88,7 +88,8 @@
       <table class="table table-borderless">
           <thead>
             <tr>
-              <th scope="col">Title</th>
+              <th scope="col">No</th>
+              <th scope="col">Posisi</th>
               <th scope="col">Tanggal Posting</th>
               <th scope="col">Status</th>
               <th scope="col">Pelamar</th>
@@ -96,9 +97,11 @@
               <th scope="col">Action</th>
             </tr>
           </thead>
-          {% for lowongan in lowongan_pekerjaan %}
+          {% with data=lowongan_pekerjaan %}
+          {% for lowongan in data %}
           <tbody>
             <tr>
+              <td>{{ forloop.counter }}</td>
               <td>{{lowongan.posisi}}</td>
               <td>{{lowongan.created_at}}</td>
               {% if lowongan.status == 'Buka' %}
@@ -123,6 +126,7 @@
             </tr>
           </tbody>
           {%endfor%}
+          {% endwith %}
         </table>
   </div>
     <br>

@@ -5,8 +5,8 @@
 
 <div id="mySidebar" class="sidebar b">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-  <a class="hov active" href="{% url 'dashboard-lowongan-pekerjaan'%}">Dashboard Perusahaan</a>
-  <a class="hov gh" href="{% url 'lowongan-dibuka'%}">Lowongan Dibuka</a>
+  <a class="hov" href="{% url 'dashboard-lowongan-pekerjaan'%}">Dashboard Perusahaan</a>
+  <a class="hov active" href="{% url 'lowongan-dibuka'%}">Lowongan Dibuka</a>
   <a class="hov gh" href="{% url 'lowongan-ditutup'%}">Lowongan Ditutup</a>
 </div>
 
@@ -30,7 +30,8 @@
             <table class="table table-borderless">
                 <thead>
                 <tr>
-                    <th scope="col">Title</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Posisi</th>
                     <th scope="col">Tanggal Posting</th>
                     <th scope="col">Status</th>
                     <th scope="col">Pelamar</th>
@@ -38,9 +39,11 @@
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
-                {% for lowongan_dibuka in lowongan_dibuka %}
+                {% with data=lowongan_dibuka %}
+                {% for lowongan_dibuka in data %}
                 <tbody>
                 <tr>
+                  <td>{{forloop.counter}}</td>
                   <td>{{lowongan_dibuka.posisi}}</td>
                   <td>{{lowongan_dibuka.created_at}}</td>
                   {% if lowongan_dibuka.status == 'Buka' %}
@@ -62,6 +65,7 @@
                 </tr>
                 </tbody>
                 {%endfor%}
+                {%endwith%}
             </table>
         </div>      
     </div>
