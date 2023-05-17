@@ -76,16 +76,19 @@
       <table class="table table-borderless">
           <thead>
             <tr>
-              <th scope="col">Nama</th>
+              <th scope="col">No</th>
+              <th scope="col">Pelamar</th>
               <th scope="col">Tanggal Daftar</th>
               <th scope="col">Status</th>
-              <th scope="col">Pelamar</th>
+              <th scope="col">Detail Pelamar</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
-          {% for pelamar in pelamar %}
+          {% with data=pelamar %}
+          {% for pelamar in data %}
           <tbody>
             <tr>
+              <td>{{ forloop.counter }}</td>
               <td>{{pelamar.users_id.name}}</td>
               <td>{{pelamar.created_at}}</td>
               <td>{{pelamar.status}}</td>
@@ -107,6 +110,7 @@
             </tr>
           </tbody>
           {%endfor%}
+          {% endwith %}
         </table>
   </div>
     <br>

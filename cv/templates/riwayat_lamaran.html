@@ -80,6 +80,7 @@
             <table class="table table-borderless" id="sortTable" aria-describedby="Daftar Riwayat Lamaran">
                 <thead>
                     <tr>
+                        <th scope="col">No</th>
                         <th scope="col">Posisi</th>
                         <th scope="col">Perusahaan</th>
                         <th scope="col">Status Lamaran</th>
@@ -90,9 +91,11 @@
                 </thead>
 
                 {% if lamaran_lowongan_company %}
+                {% with data=lamaran_lowongan_company %}
                 {% for lamaran, lowongan, company in lamaran_lowongan_company %}
                 <tbody>
                     <tr>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ lowongan.posisi }}</td>
                         <td>{{ company.0.name|title }}</td>
                         {% if lamaran.status.strip|lower == 'pending'%}
@@ -128,6 +131,7 @@
                     </tr>
                 </tbody>
                 {% endfor %}
+                {% endwith %}
                 {% endif %}
 
             </table>
