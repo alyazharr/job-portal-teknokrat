@@ -4,6 +4,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from .forms import BukaLowonganForm,LamarForm
 from .models import Lowongan, Lamar
 from django.db.models import Q
+from django.contrib import messages
+from django.shortcuts import redirect
 
 LOGINURL = '/login/'
 
@@ -62,24 +64,28 @@ class DetailLowonganView(FormMixin,UserPassesTestMixin,DetailView):
         return super().form_valid(form)
     
     def lamaran_is_valid(self):
-        # check jika pengguna telah melamar
         lowongan = Lowongan.objects.get(id=self.kwargs.get('pk'))
         already_lamar = Lamar.objects.filter(users_id=self.request.user.id,lowongan_id=self.kwargs.get('pk')).exists()
         return not already_lamar and lowongan.is_open
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid() and self.lamaran_is_valid():
-            return self.form_valid(form)
+        if request.user.role_id == 1:
+            self.object = self.get_object()
+            form = self.get_form()
+            if form.is_valid() and self.lamaran_is_valid():
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
         else:
-            return self.form_invalid(form)
+            messages.info(request, "Anda tidak memiliki akses.")
+            return redirect(LOGINURL)
        
     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_alumni'] = self.request.user.role_id == 1
         already_lamar = Lamar.objects.filter(users_id=self.request.user.id,lowongan_id=self.kwargs.get('pk')).exists()
-        if already_lamar:
-            kwargs['already_lamar'] = True
-        return super().get_context_data(**kwargs)
+        context['already_lamar'] = already_lamar
+        return context
 
     def test_func(self):
         return self.request.user.is_authenticated

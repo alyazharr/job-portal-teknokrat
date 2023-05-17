@@ -6,11 +6,14 @@ from django.urls import reverse
 import json
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.messages import get_messages
+
+LOGIN = 'homepage:login'
+MSG_NO_AKSES = 'Anda tidak memiliki akses.'
 
 class BukaLowonganViews(TestCase):
     
     def setUp(self):
-        # set up alumni data
         self.alumni = Users.objects.create (
             username="alumni",
             password="password",
@@ -19,7 +22,6 @@ class BukaLowonganViews(TestCase):
             role_id=1
         )
 
-        # set up perusahaan data
         self.perusahaan = Users.objects.create (
             username="perusahaan",
             password="password",
@@ -78,7 +80,6 @@ class BukaLowonganViews(TestCase):
 class EditLowonganViews(TestCase):
     
     def setUp(self):
-        # set up alumni data
         self.alumni = Users.objects.create (
             username="alumni",
             password="password",
@@ -87,7 +88,6 @@ class EditLowonganViews(TestCase):
             role_id=1
         )
 
-        # set up perusahaan data
         self.perusahaan = Users.objects.create (
             username="perusahaan",
             password="password",
@@ -96,7 +96,6 @@ class EditLowonganViews(TestCase):
             role_id=2
         )
 
-        # set up lowongan data
         self.lowongan =  Lowongan.objects.create(
             users_id=self.perusahaan,
             posisi="Junior Software engineer",
@@ -158,7 +157,6 @@ class EditLowonganViews(TestCase):
 class ListLowonganViewTestCase(TestCase):
 
     def setUp(self):
-        # set up alumni data
         self.alumni = Users.objects.create (
             username="alumni",
             password="password",
@@ -167,7 +165,6 @@ class ListLowonganViewTestCase(TestCase):
             role_id=1
         )
 
-        # set up perusahaan data
         self.perusahaan = Users.objects.create (
             username="perusahaan",
             password="password",
@@ -175,8 +172,6 @@ class ListLowonganViewTestCase(TestCase):
             prodi_id=2,
             role_id=2
         )
-
-          # 15 lowongan yang statusnya buka
 
         for i in range(1,16):
             Lowongan.objects.create(
@@ -189,7 +184,6 @@ class ListLowonganViewTestCase(TestCase):
                 batas_pengumpulan=timezone.now().date() + timedelta(days=i)
             )
 
-        # 5 lowongan yang statusnya tutup
         for i in range(1,6):
             Lowongan.objects.create(
                 users_id=self.perusahaan,
@@ -201,7 +195,6 @@ class ListLowonganViewTestCase(TestCase):
                 batas_pengumpulan=timezone.now().date() + timedelta(days=i)
         )
 
-        # 5 lowongan yang yang statusnya Belum terverifikasi
         for i in range(1,6):
             Lowongan.objects.create(
                 users_id=self.perusahaan,
@@ -212,7 +205,7 @@ class ListLowonganViewTestCase(TestCase):
                 buka_lowongan=timezone.now().date(),
                 batas_pengumpulan=timezone.now().date() + timedelta(days=i)
         )
-        # 5 lowongan yang statusnya sudah terverifikasi
+
         for i in range(1,6):
             Lowongan.objects.create(
                 users_id=self.perusahaan,
@@ -223,7 +216,7 @@ class ListLowonganViewTestCase(TestCase):
                 buka_lowongan=timezone.now().date(),
                 batas_pengumpulan=timezone.now().date() + timedelta(days=i)
         )
-        # 5 lowongan yang statusnya ditolak
+
         for i in range(1,6):
             Lowongan.objects.create(
                 users_id=self.perusahaan,
@@ -301,7 +294,6 @@ class DetailLowonganTestCase(TestCase):
 
     def setUp(self):
 
-        # set up alumni data
         self.alumni = Users.objects.create (
             username="alumni",
             password="password",
@@ -310,7 +302,6 @@ class DetailLowonganTestCase(TestCase):
             role_id=1
         )
 
-        # set up perusahaan data
         self.perusahaan = Users.objects.create (
             username="perusahaan",
             password="password",
@@ -319,7 +310,14 @@ class DetailLowonganTestCase(TestCase):
             role_id=2
         )
 
-        # set up lowongan data
+        self.admin = Users.objects.create (
+            username="adminsuper",
+            password="adminsuper",
+            npm=2,
+            prodi_id=4,
+            role_id=4
+        )
+
         self.lowongan = Lowongan.objects.create(
                 users_id=self.perusahaan,
                 posisi="Software engineer",
@@ -359,7 +357,7 @@ class DetailLowonganTestCase(TestCase):
          
         self.assertRaises(ObjectDoesNotExist, Lamar.objects.get,users_id=self.alumni.id,lowongan_id=closed_lowongan.id)
 
-    def test_lamar_object_should_be_created_if_user_lamar(self):
+    def test_lamar_object_should_be_created_if_user_lamar_is_alumni(self):
         self.client.login(username='alumni',password='password')
         response = self.client.post(
             reverse(self.url,args=[ self.lowongan.id ]),
@@ -370,6 +368,36 @@ class DetailLowonganTestCase(TestCase):
         )
         created_lamar = Lamar.objects.get(users_id=self.alumni.id,lowongan_id=self.lowongan.id)
         self.assertIsNotNone(created_lamar)
+
+    def test_lamar_object_should_be_created_if_user_lamar_is_perusahaan(self):
+        self.client.login(username='perusahaan',password='password')
+        response = self.client.post(
+            reverse(self.url,args=[ self.lowongan.id ]),
+            {
+                "users_id" : self.perusahaan.id,
+                "lowongan_id" : self.lowongan.id
+            }
+        )
+        self.assertRedirects(response, reverse(LOGIN)) 
+        self.assertEqual(response.status_code, 302)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), MSG_NO_AKSES)
+
+    def test_lamar_object_should_be_created_if_user_lamar_is_admin(self):
+        self.client.login(username='adminsuper',password='adminsuper')
+        response = self.client.post(
+            reverse(self.url,args=[ self.lowongan.id ]),
+            {
+                "users_id" : self.admin.id,
+                "lowongan_id" : self.lowongan.id
+            }
+        )
+        self.assertRedirects(response, reverse(LOGIN)) 
+        self.assertEqual(response.status_code, 302)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), MSG_NO_AKSES)
 
     def test_lamar_object_should_only_be_created_once_if_user_already_lamar(self):
         self.client.login(username='alumni',password='password')
@@ -396,13 +424,11 @@ class DetailLowonganTestCase(TestCase):
         response = self.client.get(reverse(self.url,args=[ self.lowongan.id ]))
         self.assertTemplateUsed(response, 'detail_lowongan.html')
     
-    # negative test for lowongan availability
     def test_detail_lowongan_should_return_404_if_lowongan_does_not_exist(self):
         self.client.login(username='alumni',password='password')
-        response = self.client.get(reverse(self.url,args=[ 2 ]))
+        response = self.client.get(reverse(self.url,args=[ 34345678 ]))
         self.assertEqual(response.status_code, 404)
-    
-    # positive test for lowongan availability
+
     def test_detail_lowongan_should_return_lowongan_by_pk(self):
         self.client.login(username='alumni',password='password')
         response = self.client.get(reverse(self.url,args=[ self.lowongan.id ]))
