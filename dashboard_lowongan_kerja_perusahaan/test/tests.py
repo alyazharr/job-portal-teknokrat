@@ -25,8 +25,7 @@ DESKRIPSI = "Ahli dalam bidang data dan ML"
 global DATE_FORMAT
 DATE_FORMAT = "%Y-%m-%d"
 
-    # test-case kalau belum login
-class DashboardPekerjaanNotLoggedIn(TestCase):
+class DashboardLowonganNotLoggedIn(TestCase):
     def setUp(self):
         self.url ='/dashboard-lowongan-pekerjaan/'
         PASSWORD_PERUSAHAAN = "Perusahaan123"
@@ -35,7 +34,6 @@ class DashboardPekerjaanNotLoggedIn(TestCase):
         PRODI_ID_PERUSAHAAN = 84202
         ROLE_ID_PERUSAHAAN=2
 
-        # set up perusahaan
         self.perusahaan = Users.objects.create (
             username=USERNAME_PERUSAHAAN,
             password=PASSWORD_PERUSAHAAN,
@@ -44,7 +42,6 @@ class DashboardPekerjaanNotLoggedIn(TestCase):
             role_id=ROLE_ID_PERUSAHAAN
         )
 
-        # set up membuat lowongan
         self.lowongan = Lowongan.objects.create(
             users_id = self.perusahaan,
             posisi="Data Scientist",
@@ -69,8 +66,7 @@ class DashboardPekerjaanNotLoggedIn(TestCase):
         response = Client().get(LOWONGAN_DITUTUP)
         self.assertEqual(response.status_code, 302)
 
-# test-case kalau sudah login (dan admin)
-class DashboardPekerjaanCompany(TestCase):  
+class DashboardLowonganCompany(TestCase):  
     def setUp(self) -> None:
         PASSWORD = "dummy-company"
         USERNAME = "company"
@@ -95,7 +91,6 @@ class DashboardPekerjaanCompany(TestCase):
         PRODI_ID_PERUSAHAAN = 84202
         ROLE_ID_PERUSAHAAN=2
 
-        # set up perusahaan
         self.perusahaan = Users.objects.create (
             username=USERNAME_PERUSAHAAN,
             password=PASSWORD_PERUSAHAAN,
@@ -105,13 +100,22 @@ class DashboardPekerjaanCompany(TestCase):
             role_id=ROLE_ID_PERUSAHAAN
         )
 
+        self.perusahaan2 = Users.objects.create (
+            username="perusahaan2",
+            password="perusahaan2password",
+            name="perusahaan2",
+            npm=1234,
+            prodi_id=12345,
+            role_id=ROLE_ID_PERUSAHAAN
+        )
+
         lowongan1 = Lowongan.objects.create(
             users_id = self.perusahaan,
             posisi=POSISI,
             gaji=8000000,
             lama_pengalaman= 10,
             deskripsi= DESKRIPSI,
-            requirements=json.dumps(["s1"]),
+            requirements="lorem ipsum 2",
             buka_lowongan=datetime.today().strftime(DATE_FORMAT),
             batas_pengumpulan=(datetime.today() + timedelta(days=1)).strftime(DATE_FORMAT),
             status ='Buka'
@@ -123,20 +127,33 @@ class DashboardPekerjaanCompany(TestCase):
             gaji=8000000,
             lama_pengalaman= 10,
             deskripsi= DESKRIPSI,
-            requirements=json.dumps(["s1"]),
+            requirements="lorem ipsum",
             buka_lowongan=datetime.today().strftime(DATE_FORMAT),
             batas_pengumpulan=(datetime.today() + timedelta(days=1)).strftime(DATE_FORMAT),
             status ='Tutup'
-
         )
 
+        lowongan_owned_check = Lowongan.objects.create(
+            users_id = self.perusahaan2,
+            posisi="Sekretaris",
+            gaji=1200000,
+            lama_pengalaman= 5,
+            deskripsi= "bisa bantu saya",
+            requirements="bisa atur jadwal saya",
+            buka_lowongan=datetime.today().strftime(DATE_FORMAT),
+            batas_pengumpulan=(datetime.today() + timedelta(days=1)).strftime(DATE_FORMAT),
+            status ='Buka'
+        )
         self.lowongan_dibuka = lowongan1
         self.lowongan_dibuka.save()
+
+        self.lowongan_owned = lowongan_owned_check
+        self.lowongan_owned.save()
 
         self.lowongan_ditutup = lowongan2
         self.lowongan_ditutup.save()
 
-        login = self.client.login(username=USERNAME,password=PASSWORD)
+        login = self.client.login(username=USERNAME_PERUSAHAAN,password=PASSWORD_PERUSAHAAN)
         self.admin_acc = perusahaan_acc
         self.assertTrue(login)
     
@@ -147,6 +164,14 @@ class DashboardPekerjaanCompany(TestCase):
         self.assertEqual(response.context['total_lowongan'], 2)
         self.assertEqual(response.context['total_dibuka'], 1)
         self.assertEqual(response.context['total_ditutup'], 1)
+
+    def lowongan_owned_by_perusahaan(self):
+        owned_lowongan = Lowongan.objects.get(users_id = self.perusahaan.id)
+        self.assertEqual(owned_lowongan[0], self.lowongan_dibuka)
+
+    def lowongan_owned_by_perusahaan2(self):
+        owned_lowongan = Lowongan.objects.get(users_id = self.perusahaan2.id)
+        self.assertEqual(owned_lowongan, self.lowongan_owned)
         
     def test_lowongan_dibuka_response_logged_in(self):
         response = self.client.get(LOWONGAN_DIBUKA)
@@ -166,8 +191,7 @@ class DashboardPekerjaanCompany(TestCase):
         self.lowongan_dibuka.refresh_from_db()
         self.assertEqual(self.lowongan_dibuka.status, 'Tutup')
 
-# test-case kalau sudah login (tapi bukan perusahaan)
-class DashboardProposalLowonganTestNotAdmin(TestCase):
+class DashboardLowonganTestNotCompany(TestCase):
     def setUp(self) -> None:
         PASSWORD = "NotCompany"
         NAME = "Not Company Dummy"
@@ -191,7 +215,6 @@ class DashboardProposalLowonganTestNotAdmin(TestCase):
         PRODI_ID_PERUSAHAAN = 84202
         ROLE_ID_PERUSAHAAN=2
 
-        # set up perusahaan
         self.perusahaan = Users.objects.create (
             username=USERNAME_PERUSAHAAN,
             password=PASSWORD_PERUSAHAAN,
@@ -218,17 +241,17 @@ class DashboardProposalLowonganTestNotAdmin(TestCase):
     def test_dashboard_response(self):
         response = self.client.get(DASHBOARD)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse(LOGIN)) # sesuaikan dengan login 
+        self.assertRedirects(response, reverse(LOGIN))
 
     def test_lowongan_dibuka_response(self):
         response = self.client.get(LOWONGAN_DIBUKA)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse(LOGIN)) # sesuaikan dengan login 
+        self.assertRedirects(response, reverse(LOGIN))
     
     def test_lowongan_ditutup_response(self):
         response = self.client.get(LOWONGAN_DITUTUP)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse(LOGIN)) # sesuaikan dengan login 
+        self.assertRedirects(response, reverse(LOGIN))
 
     def test_ubah_status(self):
         response = self.client.get(reverse('ubah_status', args=[self.lowongan.id]))
