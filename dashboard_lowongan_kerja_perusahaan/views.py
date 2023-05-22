@@ -12,10 +12,10 @@ HOMEPAGE_LOGIN = 'homepage:login'
 def display_dashboard(request):
     user = request.user
     if (user.role_id == 2):
-        data = Lowongan.objects.all()
+        data = Lowongan.objects.filter(users_id = user.id)
         total_lowongan = data.count()
-        total_dibuka = Lowongan.objects.filter(status='Buka').count()
-        total_ditutup = Lowongan.objects.filter(status='Tutup').count()
+        total_dibuka = Lowongan.objects.filter(users_id = user.id, status='Buka').count()
+        total_ditutup = Lowongan.objects.filter(users_id = user.id, status='Tutup').count()
     else:
         return redirect(HOMEPAGE_LOGIN) 
     return render(request, 'dashboard_lowongan_kerja_perusahaan.html', {'lowongan_pekerjaan': data,'total_lowongan':total_lowongan,'total_dibuka':total_dibuka,'total_ditutup':total_ditutup})
@@ -24,7 +24,7 @@ def display_dashboard(request):
 def display_lowongan_dibuka(request):
     user = request.user
     if (user.role_id == 2):
-        data = Lowongan.objects.filter(status='Buka')
+        data = Lowongan.objects.filter(users_id = user.id, status='Buka')
     else: 
         return redirect(HOMEPAGE_LOGIN) 
     return render(request, 'lowongan_dibuka.html', {'lowongan_dibuka': data})
@@ -33,7 +33,7 @@ def display_lowongan_dibuka(request):
 def display_lowongan_ditutup(request):
     user = request.user
     if (user.role_id == 2):
-        data = Lowongan.objects.filter(status='Tutup')
+        data = Lowongan.objects.filter(users_id = user.id, status='Tutup')
     else:
         return redirect(HOMEPAGE_LOGIN) 
     return render(request, 'lowongan_ditutup.html', {'lowongan_ditutup': data})
@@ -42,7 +42,7 @@ def display_lowongan_ditutup(request):
 def ubah_status(request,id):
     user = request.user
     if (user.role_id == 2):
-        lowongan = Lowongan.objects.get(id=id)
+        lowongan = Lowongan.objects.get(users_id = user.id, id=id)
     else:
         return redirect(HOMEPAGE_LOGIN) 
     if lowongan.status =='Buka':
@@ -55,11 +55,11 @@ def ubah_status(request,id):
 def pelamar_lowongan(request,id):
     user = request.user
     if (user.role_id == 2):
-        lowongan = Lowongan.objects.get(id=id)
+        lowongan = Lowongan.objects.get(users_id = user.id, id=id)
         data = Lamar.objects.filter(lowongan_id=lowongan)
         total_pelamar = data.count()
-        pelamar_diterima = Lamar.objects.filter(status='Diterima').count()
-        pelamar_ditolak = Lamar.objects.filter(status='Ditolak').count()
+        pelamar_diterima = Lamar.objects.filter(lowongan_id=lowongan, status='Diterima').count()
+        pelamar_ditolak = Lamar.objects.filter(lowongan_id=lowongan, status='Ditolak').count()
     else:
         return redirect(HOMEPAGE_LOGIN) 
     return render(request, 'dashboard_pelamar.html', {'pelamar': data,'lowongan':lowongan,'total_pelamar':total_pelamar,'pelamar_diterima':pelamar_diterima,'pelamar_ditolak':pelamar_ditolak})
