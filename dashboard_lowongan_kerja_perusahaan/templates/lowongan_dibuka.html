@@ -53,13 +53,13 @@
                   {% endif %}
                   <td><button class="btn btn-read">Preview</button></td>
                   <td>
-                    <form action="{% url 'ubah_status' lowongan_dibuka.id %}" method="GET">
-                    {% if lowongan_dibuka.status == 'Buka' %}
-                      <button class="btn btn-outline-danger" type="submit">Tutup</button>
-                    {% else %}
-                      <button class="btn btn-outline-success" type="submit" >Buka</button>
-                    {% endif %}
-                    </form>
+                    <form action="{% url 'ubah_status' lowongan.id %}" method="GET">
+                      {% if lowongan.status == 'Buka' %}
+                        <button class="btn btn-outline-danger " type="submit">Tutup</button>
+                      {% else %}
+                        <button class="btn btn-outline-disabled" type="submit" >Tidak Bisa Diubah</button>
+                      {% endif %}
+                      </form>
                   </td>
                   <td><button class="btn btn-outline-primary">Edit</button></td>
                 </tr>
