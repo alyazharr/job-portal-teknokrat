@@ -15,7 +15,10 @@ class UserForm(forms.ModelForm):
         fields = ['email', 'name', 'no_telp', 'alamat', 'tempat_lahir', 'tgl_lahir', 'ipk']
         exclude = ['password']    
         widgets= {
-            'tgl_lahir': DateInput(attrs={'type': 'date'}),
+            'tgl_lahir': DateInput(attrs={'type': 'date', 'disabled': 'disabled'}),
+            'name': forms.TextInput(attrs={'disabled': 'disabled'}),
+            'ipk': forms.NumberInput(attrs={'disabled': 'disabled'}),
+            'tempat_lahir': forms.TextInput(attrs={'disabled': 'disabled'}),
         } 
 
 class CVForm(forms.ModelForm):
@@ -23,5 +26,7 @@ class CVForm(forms.ModelForm):
         model = CV
         fields = ['prestasi', 'kemampuan', 'keterangan_pendidikan', 'asal_sekolah', 'masa_waktu', 'instansi', 'keterangan_posisi']
         exclude = ['users_id', 'id', 'created_at', 'updated_at', 'status',]
-        
-
+        widgets= {
+            'keterangan_pendidikan': forms.TextInput(attrs={'disabled': 'disabled'}),
+            'asal_sekolah': forms.TextInput(attrs={'disabled': 'disabled'}),
+        }
