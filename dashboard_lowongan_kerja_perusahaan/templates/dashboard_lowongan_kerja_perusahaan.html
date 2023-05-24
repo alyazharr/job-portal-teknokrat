@@ -102,7 +102,7 @@
           <tbody>
             <tr>
               <td>{{ forloop.counter }}</td>
-              <td>{{lowongan.posisi}}</td>
+              <td> <a href="{% url 'dashboard_proposal_lowongan:detail' lowongan.id %}"><strong>{{lowongan.posisi}}</strong></a></td>
               <td>{{lowongan.created_at}}</td>
               {% if lowongan.status == 'Buka' %}
               <td style="color:green;"><b>{{lowongan.status}}</b></td>
