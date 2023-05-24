@@ -9,7 +9,6 @@ LOGIN = 'homepage:login'
 
 global DATE_FORMAT
 DATE_FORMAT = "%Y-%m-%d"
-
 class PelamarLowonganTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -18,6 +17,7 @@ class PelamarLowonganTestCase(TestCase):
             username="alumni",
             password="password",
             npm=1,
+            ipk = 4,
             prodi_id=1,
             role_id=1
         )
@@ -26,6 +26,7 @@ class PelamarLowonganTestCase(TestCase):
             username="alumni2",
             password="password",
             npm=2,
+            ipk = 3.5,
             prodi_id=1,
             role_id=1
         )
@@ -53,14 +54,14 @@ class PelamarLowonganTestCase(TestCase):
             lowongan_id = self.lowongan,
             users_id = self.alumni1,
             status ='Pending',
-            created_at = datetime.today().strftime(DATE_FORMAT),
+            created_at = datetime(2023, 5, 24, 0, 0, 0),
         )
 
         self.lamaran2 = Lamar.objects.create(
             lowongan_id = self.lowongan,
             users_id = self.alumni2,
             status ='Pending',
-            created_at = datetime.today().strftime(DATE_FORMAT),
+            created_at = datetime(2023, 5, 24, 0, 0, 0),
         )
     
     def test_pelamar_lowongan_logged_in(self):
@@ -112,3 +113,19 @@ class PelamarLowonganTestCase(TestCase):
         self.assertEqual(response.context['total_pelamar'], 2)
         self.assertEqual(response.context['pelamar_diterima'], 1)
         self.assertEqual(response.context['pelamar_ditolak'], 1)
+    
+    def test_sort_by_ipk(self):
+        self.client.login(username='perusahaan', password='password')
+        url = reverse('pelamar_lowongan', args=[self.lowongan.id])
+        response = self.client.get(url, {'sort_by_ipk': 'true'})
+        data = response.context['pelamar']
+        ipks = [float(lamar.users_id.ipk) for lamar in data]
+        self.assertEqual(ipks, [4, 3.5])
+
+    def test_sort_by_date(self):
+        self.client.login(username='perusahaan', password='password')
+        url = reverse('pelamar_lowongan', args=[self.lowongan.id])
+        response = self.client.get(url, {'sort_by_date': 'true'})
+        data = response.context['pelamar']
+        created_dates = [lamar.created_at.strftime("%Y-%m-%d") for lamar in data]  # Convert datetime objects to strings
+        self.assertEqual(created_dates, ['2023-05-24', '2023-05-24'])
