@@ -78,3 +78,12 @@ python manage.py createsuperuser
 ```
 
 Dashboard superuser django dapat diakses pada `http://localhost:8000/admin/`
+
+4. Menjalankan Celery
+
+Agar notifikasi bekerja, maka anda perlu menjalankan dua command berikut.
+
+- `celery -A jobseeker worker --loglevel=info -P eventlet`
+- `celery -A jobseeker beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler`
+
+Anda harus memastikan bahwa redis telah berjalan di belakang layar.
