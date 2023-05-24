@@ -25,7 +25,7 @@ EXPOSE 8000
 
 CMD python manage.py makemigrations && \
     python manage.py migrate && \ 
-    | python manage.py shell && \
+      python manage.py shell && \
       python manage.py runserver 0.0.0.0:8000 && \
       celery -A jobseeker worker --loglevel=info -P eventlet && \
       celery -A jobseeker beat -l INFO
