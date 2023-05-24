@@ -5,6 +5,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
 
 <style>
   table tbody:nth-child(odd) {
@@ -68,17 +73,27 @@
       </div>
     </div>
   </div>  
-
+ 
   <div style="margin: 10px;"></div>
   <div class="text-center">
     <br>
     <div class="container center">
-      <table class="table table-borderless">
+      <div style="display:flex; gap:10px;"}>
+        <form method="get" action="{% url 'pelamar_lowongan' lowongan.id %}">
+          <button type="submit"  class="btn btn-secondary btn-sm" name="sort_by_ipk" value="true">Sort by IPK</button>
+        </form>  
+    
+        <form method="get" action="{% url 'pelamar_lowongan' lowongan.id %}">
+          <button type="submit"  class="btn btn-secondary btn-sm" name="sort_by_date" value="true">Sort by Date</button>
+        </form>  
+      </div>  
+      <table style="margin-top: 10px;" class="table table-borderless">
           <thead>
             <tr>
               <th scope="col">No</th>
               <th scope="col">Pelamar</th>
               <th scope="col">Tanggal Daftar</th>
+              <th scope="col">IPK</th>
               <th scope="col">Status</th>
               <th scope="col">Detail Pelamar</th>
               <th scope="col">Action</th>
@@ -91,6 +106,7 @@
               <td>{{ forloop.counter }}</td>
               <td>{{pelamar.users_id.name}}</td>
               <td>{{pelamar.created_at}}</td>
+              <td>{{pelamar.users_id.ipk}}</td>
               <td>{{pelamar.status}}</td>
               <td>
                 <form action="{% url 'cv:resume' pelamar.users_id.username %}" method="GET">
@@ -119,10 +135,4 @@
     <br>
   </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
-
-
 {% endblock content %}

@@ -50,19 +50,33 @@ def ubah_status(request,id):
     lowongan.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-
-@login_required(login_url=HOMEPAGE_LOGIN)
-def pelamar_lowongan(request,id):
+def pelamar_lowongan(request, id):
     user = request.user
-    if (user.role_id == 2):
-        lowongan = Lowongan.objects.get(users_id = user.id, id=id)
+    if user.role_id == 2:
+        lowongan = Lowongan.objects.get(users_id=user.id, id=id)
         data = Lamar.objects.filter(lowongan_id=lowongan)
         total_pelamar = data.count()
         pelamar_diterima = Lamar.objects.filter(lowongan_id=lowongan, status='Diterima').count()
         pelamar_ditolak = Lamar.objects.filter(lowongan_id=lowongan, status='Ditolak').count()
+        
+        sort_by_ipk = request.GET.get('sort_by_ipk')
+        sort_by_date = request.GET.get('sort_by_date')
+        if sort_by_ipk:
+            data = data.order_by('-users_id__ipk')  # Sort by IPK from highest to lowest
+        if sort_by_date:
+            data = data.order_by('-created_at')
+
     else:
         return redirect(HOMEPAGE_LOGIN) 
-    return render(request, 'dashboard_pelamar.html', {'pelamar': data,'lowongan':lowongan,'total_pelamar':total_pelamar,'pelamar_diterima':pelamar_diterima,'pelamar_ditolak':pelamar_ditolak})
+
+    context = {
+        'pelamar': data,
+        'lowongan': lowongan,
+        'total_pelamar': total_pelamar,
+        'pelamar_diterima': pelamar_diterima,
+        'pelamar_ditolak': pelamar_ditolak,
+    }
+    return render(request, 'dashboard_pelamar.html', context)
 
 login_required(login_url=HOMEPAGE_LOGIN)
 def terima_pelamar(request,id):
@@ -86,7 +100,4 @@ def tolak_pelamar(request,id):
         return redirect(HOMEPAGE_LOGIN) 
     return redirect(request.META.get('HTTP_REFERER', '/'))
     
-
-    
-
 
