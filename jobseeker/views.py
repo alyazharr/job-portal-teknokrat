@@ -31,7 +31,11 @@ class EditLowonganFormView(UserPassesTestMixin,UpdateView):
     login_url = LOGINURL
 
     def test_func(self):
-        return self.request.user.is_authenticated and self.request.user.role_id == 2
+        return self.request.user.is_authenticated and self.request.user.role_id == 2 and self.get_object(queryset=self.queryset).users_id == self.request.user
+        
+    def handle_no_permission(self):
+        messages.info(self.request, "Anda tidak memiliki akses.")
+        return redirect(LOGINURL)
 
 class ListLowonganView(UserPassesTestMixin, ListView):
     model = Lowongan

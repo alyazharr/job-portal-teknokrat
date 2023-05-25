@@ -78,6 +78,61 @@ class EditResumeTestCase(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 302)
     
+    def test_edit_resume_should_only_change_changed_data(self):
+        client = Client()
+        client.login(username="pengguna1", password="password")
+        response = client.post(reverse(self.CV_RESUME_EDIT), {
+            'name': 'pengguna1',
+            'email': 'emailku@mail.com',
+            'no_telp': '08123456789',
+            'alamat': 'Jl. Jalan',
+            'tempat_lahir': 'Jakarta',
+            'tgl_lahir': '1999-01-01',
+            'ipk': '3.5',
+            'profile': 'profile',
+            'posisi': 'manager',
+            'instansi': 'PT. CBA',
+            'lama_instansi': '1 tahun',
+            'keterangan_posisi': 'mengurus jalannya PT. CBA',
+            'asal_sekolah': 'SMA Negeri 429',
+            'masa_waktu': '2010-2013',
+            'keterangan_pendidikan': 'Sarjana',
+            'kontak': '08123456789',
+            'jenis_kontak': 'WA',
+            'kemampuan': 'menguasai bahasa inggris',
+            'prestasi': 'Juara 1 lomba menulis',
+        })
+        self.assertEqual(response.status_code, 302)
+        cv = CV.objects.get(users_id=self.created_user_1)
+        self.assertEqual(cv.profile, 'profile')
+        self.assertEqual(cv.posisi, 'manager')
+        self.assertEqual(cv.instansi, 'PT. CBA')
+
+    def test_edit_resume_should_only_change_when_logged_in(self):
+        client = Client()
+        response = client.post(reverse(self.CV_RESUME_EDIT), {
+            'name': 'pengguna1',
+            'email': 'emailkuu@mail.com',
+            'no_telp': '081213456789',
+            'alamat': 'Jl. 1',
+            'tempat_lahir': 'Jakartaa',
+            'tgl_lahir': '1999-02-01',
+            'ipk': '3.8',
+            'profile': 'eeeeeee',
+            'posisi': 'manager',
+            'instansi': 'PT. CBAD',
+            'lama_instansi': '2 tahun',
+            'keterangan_posisi': 'mengurus jalannya PT. CBA di cabang B',
+            'asal_sekolah': 'SMA Negeri 4329',
+            'masa_waktu': '2010-2014',
+            'keterangan_pendidikan': 'Magister',
+            'kontak': '081234567829',
+            'jenis_kontak': 'Whatsapp',
+            'kemampuan': 'menguasai bahasa inggris dengan baik',
+            'prestasi': 'Juara 1 lomba menulis buku',
+        })
+        self.assertEqual(response.status_code, 302)
+    
     def test_edit_resume_should_return_200_when_fail_edit(self):
         client = Client()
         client.login(username="pengguna1", password="password")
