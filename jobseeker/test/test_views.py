@@ -96,6 +96,14 @@ class EditLowonganViews(TestCase):
             role_id=2
         )
 
+        self.perusahaan2 = Users.objects.create (
+            username="perusahaan2",
+            password="password",
+            npm=3,
+            prodi_id=3,
+            role_id=2
+        )
+
         self.lowongan =  Lowongan.objects.create(
             users_id=self.perusahaan,
             posisi="Junior Software engineer",
@@ -135,6 +143,24 @@ class EditLowonganViews(TestCase):
         assert edited_lowongan != None
         assert edited_lowongan.users_id == self.perusahaan 
         assert edited_lowongan.lama_pengalaman == 5
+
+    def test_edit_lowongan_from_another_perusahaan(self):
+        client = Client()
+        client.login(username='perusahaan2',password='password')
+        edit_lowongan_response = client.post(
+            self.url,
+            {
+                "posisi" : "Senior Software Engineer",
+                "gaji" : 5000,
+                "lama_pengalaman" : 5,
+                "deskripsi" : "Backend Developer",
+                "requirements" : json.dumps(["s1"]),
+                "buka_lowongan" : timezone.now().date(),
+                "batas_pengumpulan" : timezone.now().date() + timedelta(days=1)
+            },
+        )
+        
+        assert edit_lowongan_response.status_code == 302
     
     def test_edit_lowongan_from_alumni(self):
         client = Client()
@@ -152,7 +178,7 @@ class EditLowonganViews(TestCase):
             },
         )
         
-        assert edit_lowongan_response.status_code == 403 
+        assert edit_lowongan_response.status_code == 302
 
 class ListLowonganViewTestCase(TestCase):
 
