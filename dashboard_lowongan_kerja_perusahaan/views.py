@@ -3,10 +3,12 @@ from django.shortcuts import render, redirect
 from jobseeker.models import Lowongan,Lamar
 from django.contrib.auth.decorators import login_required
 from datetime import date
+from django.contrib import messages
 
 
 global HOMEPAGE_LOGIN
 HOMEPAGE_LOGIN = 'homepage:login'
+MSG_NO_LOGIN = 'Anda tidak memiliki akses ke laman ini. Silakan login sebagai Perusahaan.'
 
 @login_required(login_url=HOMEPAGE_LOGIN)
 def display_dashboard(request):
@@ -100,4 +102,23 @@ def tolak_pelamar(request,id):
         return redirect(HOMEPAGE_LOGIN) 
     return redirect(request.META.get('HTTP_REFERER', '/'))
     
-
+@login_required(login_url=HOMEPAGE_LOGIN) 
+def detail_page(request, id):
+    user = request.user
+    msg_feedback = MSG_NO_LOGIN
+    context = {}
+    if (user.role_id == 2):
+        msg_feedback =''
+        if Lowongan.objects.filter(id=id).exists():
+            lowongan = Lowongan.objects.get(id=id)
+            company = request.user
+            context = {
+                'lowongan': lowongan,
+                'company':company,
+                'msg':'Tersedia'
+                }
+        messages.info(request, msg_feedback)
+    else:
+        messages.info(request, msg_feedback)
+        return redirect(HOMEPAGE_LOGIN) 
+    return render(request, "detail_pekerjaan.html", context)

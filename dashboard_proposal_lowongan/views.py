@@ -132,7 +132,7 @@ def detail(request, id):
     user = request.user
     msg_feedback = MSG_NO_LOGIN
     context = {}
-    if (user.role_id == 3) or (user.role_id == 4) or (user.role_id == 2):
+    if (user.role_id == 3) or (user.role_id == 4):
         msg_feedback =''
         if Lowongan.objects.filter(id=id).exists():
             lowongan = Lowongan.objects.get(id=id)
