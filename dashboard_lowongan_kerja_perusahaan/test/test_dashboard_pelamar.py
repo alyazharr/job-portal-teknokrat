@@ -76,6 +76,12 @@ class PelamarLowonganTestCase(TestCase):
         response = self.client.get(reverse('pelamar_lowongan', args=[self.lowongan.id]))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse(LOGIN)) 
+    
+    def test_detail_page_with_unauthenticated_use(self):
+        self.client.login(username='alumni', password='password')
+        response = self.client.get(reverse('detail_page', args=[self.lowongan.id]))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse(LOGIN)) 
 
     def test_terima_pelamar_with_authenticated_user(self):
         self.client.login(username='perusahaan', password='password')
@@ -127,5 +133,14 @@ class PelamarLowonganTestCase(TestCase):
         url = reverse('pelamar_lowongan', args=[self.lowongan.id])
         response = self.client.get(url, {'sort_by_date': 'true'})
         data = response.context['pelamar']
-        created_dates = [lamar.created_at.strftime("%Y-%m-%d") for lamar in data]  # Convert datetime objects to strings
-        self.assertEqual(created_dates, ['2023-05-24', '2023-05-24'])
+        created_dates = [lamar.created_at.strftime("%Y-%m-%d") for lamar in data]
+        today = str(datetime.now().date())
+        self.assertEqual(created_dates, [today,today])
+    
+    def test_detail_page(self):
+        self.client.login(username='perusahaan', password='password')
+        url = reverse('detail_page', args=[self.lowongan.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'detail_pekerjaan.html')
+        self.assertEqual(response.context['msg'], 'Tersedia')
