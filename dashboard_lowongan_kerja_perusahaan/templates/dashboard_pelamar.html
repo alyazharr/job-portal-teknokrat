@@ -115,8 +115,8 @@
               </td>
               <td  class="action">
                     {% if pelamar.status == 'Pending' %}
-                    <form action="{% url 'terima_pelamar' pelamar.id %}" method="GET"onsubmit="return confirm('Apakah Anda yakin mau menerima kandidat?')">
-                        <button class="btn btn-outline-success " type="submit"  >Terima</button>
+                    <form action="{% url 'terima_pelamar' pelamar.id %}" method="GET">
+                        <button class="btn btn-outline-success " type="submit">Proses</button>
                     </form>
                     <form action="{% url 'tolak_pelamar' pelamar.id %}" method="GET"onsubmit="return confirm('Apakah Anda yakin mau menolak kandidat?')">
                         <button class="btn btn-outline-danger " type="submit">Tolak</button>
