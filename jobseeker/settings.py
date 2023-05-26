@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -23,70 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-+5jenqt^b@78zpr3o47exk25-cv(^d0lyz5roiz)d_9&*-46=i"
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
-CKEDITOR_CONFIGS = {
-    "default": {
-        "height": "full",
-        "width": "full",
-        "toolbar_YourCustomToolbarConfig": [
-            {
-                "name": "basicstyles",
-                "items": [
-                    "Bold",
-                    "Italic",
-                    "Underline",
-                    "Strike",
-                ],
-            },
-            {
-                "name": "paragraph",
-                "items": ["NumberedList", "BulletedList", "CheckList", "Blockquote"],
-            },
-            {"name": "links", "items": ["Link"]},
-            {"name": "styles", "items": ["FontSize"]},
-            {
-                "name": "yourcustomtools",
-                "items": [
-                    "Preview",
-                ],
-            },
-        ],
-        "toolbar": "YourCustomToolbarConfig",
-        "tabSpaces": 4,
-        "extraPlugins": ",".join(
-            [
-                "uploadimage",  # the upload image feature
-                # your extra plugins here
-                "div",
-                "autolink",
-                "autoembed",
-                "embedsemantic",
-                "autogrow",
-                # 'devtools',
-                "widget",
-                "lineutils",
-                "clipboard",
-                "dialog",
-                "dialogui",
-                "elementspath",
-            ]
-        ),
-    }
-}
+HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME', '')
 
+ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.herokuapp.com']
 
-HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME", "")
-
-ENVIRONMENT = os.environ.get("ENVIRONMENT", "")
-
-PRODUCTION = True if HEROKU_APP_NAME else False
-
-DEBUG = not PRODUCTION
-
-ALLOWED_HOSTS = [f"{HEROKU_APP_NAME}.herokuapp.com"] if PRODUCTION else ["*"]
-
-ALLOWED_HOSTS.append("ppl-teknokrat-yumdgny25a-as.a.run.app")
-CSRF_TRUSTED_ORIGINS = ["https://ppl-teknokrat-yumdgny25a-as.a.run.app"]
 
 # Application definition
 
@@ -97,15 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "jobseeker",
-    "cv",
-    "homepage",
-    "ckeditor",
-    "dashboard_proposal_lowongan",
-    "dashboard_lowongan_kerja_perusahaan",
-    "notification",
-    "django_celery_beat",
-    'svg'
 ]
 
 MIDDLEWARE = [
@@ -115,7 +48,6 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -124,9 +56,7 @@ ROOT_URLCONF = "jobseeker.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            BASE_DIR / "templates",
-        ],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -145,27 +75,12 @@ WSGI_APPLICATION = "jobseeker.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASE = {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}
-
-if ENVIRONMENT == "HEROKU":
-    DATABASE = {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DATABASE_NAME"),
-        "USER": os.environ.get("DATABASE_USER"),
-        "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
-        "HOST": os.environ.get("DATABASE_HOST"),
-        "PORT": 5432,
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
-
-elif ENVIRONMENT == "":
-    DATABASE = {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME" : "teknokrat",
-        "USER" : "root",
-    }
-
-
-DATABASES = {"default": DATABASE}
+}
 
 
 # Password validation
@@ -175,24 +90,18 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "id"
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "Asia/Jakarta"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -203,38 +112,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / 'static',
 ]
 
-CKEDITOR_BASEPATH = "/my_static/ckeditor/ckeditor/"
-
-# Auth settings
-AUTH_USER_MODEL = "jobseeker.Users"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# email settings
-
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "tracerstudyteknokrat@gmail.com"
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-# celery settings
-
-REDIS_DEFAULT = "redis://localhost:6379/0"
-CELERY_BROKER_URL = os.environ.get("REDIS_URL", REDIS_DEFAULT)
-CELERY_TIMEZONE = TIME_ZONE
-
-# host settings
-HOSTNAME = os.environ.get("HOSTNAME","localhost:8000")
