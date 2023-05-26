@@ -1,0 +1,20 @@
+@media screen and (max-width:768px) {
+    #test {
+        margin:0;
+        width: 95% !important;
+    }
+
+    #lowongan-date {
+        flex-direction: column;
+    }
+
+    #lowongan-date > div {
+        width: 100%;
+    }
+}
+
+
+.active {
+color: #fff !important;
+background: #f00 !important;
+}

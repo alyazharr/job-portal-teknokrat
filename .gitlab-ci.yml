@@ -15,7 +15,7 @@ Test:
     - python manage.py collectstatic --no-input
   when: on_success
   script:
-    - coverage run --include="./*/*" --omit="./manage.py" manage.py test
+    - coverage run --omit="**/__init__.py,*/admin.py,*/apps.py,manage.py,*/test/*,static/*,static/**,*/wsgi.py,*/asgi.py,*/settings.py,**/static/**" manage.py test
     - coverage report -m
     - coverage xml -i
   artifacts:
@@ -23,9 +23,13 @@ Test:
       - coverage.xml
   only:
     - master
+    - staging
+    - merge_requests
 
 sonarqube-check:
   stage: sonarqube
+  dependencies:
+    - Test
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -42,9 +46,13 @@ sonarqube-check:
       -D"sonar.sources=."
       -D"sonar.host.url=$SONAR_HOST_URL"
       -D"sonar.login=$SONAR_TOKEN"
+      -D"sonar.coverage.exclusions=**/__init__.py,*/admin.py,*/apps.py,manage.py,*/test/*,static/*,static/**,*/wsgi.py,*/asgi.py,*/settings.py,**/static/**"
+      -D"sonar.python.coverage.reportPaths=./coverage.xml"
   allow_failure: true
   only:
     - master
+    - staging
+    - merge_requests
 
 Deployment:
   image: ruby:latest
@@ -58,3 +66,18 @@ Deployment:
     url: $HEROKU_APP_HOST
   only:
     - master
+
+Dev Deployment:
+  stage: deploy
+  only:
+    - staging
+    - deploy
+  image: google/cloud-sdk
+  services:
+    - docker:dind
+  script:
+    - echo $GCP_SERVICE_KEY > gcloud-service-key.json # Google Cloud service accounts
+    - cat $ENV > .env.yaml
+    - gcloud auth activate-service-account --key-file gcloud-service-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud builds submit . --config=cloudbuild.yaml

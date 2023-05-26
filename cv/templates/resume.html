@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Curriculum Vitae</title>
+{% endblock meta %}
+
+{% block content %}
+
+<div class="d-flex flex-wrap justify-content-center mt-4" style="margin: 0 2.5rem 0 2.5rem;">
+    {% if message %}
+    <h5>{{ message }}</h5>
+    {% else %}
+    <div class="mt-5">
+        {% if user.image == 'default.png' %}
+        <img src="{% static '/images/default.png' %}" style="width:13rem" alt="image">
+        {% else %}
+        <p>No Image</p>
+        {% endif %}
+    </div>
+    <div style="width: 60%; min-width: 350px">
+        <div class="d-flex flex-column" style="margin: 2.5rem">
+            <div class="header font-base-red">Curriculum Vitae
+            </div>
+            {% if request.user == user %}
+            <span>
+                <a href="{% url 'cv:edit-resume' %}" class="btn secondary-btn">
+                    <span class="subheader-2">Ubah CV</span>
+                </a>
+            </span>
+            {% endif %}
+            {% if user.role_id == 1 %}
+            <div class="segment-card mt-3 p-4">
+                <div class="d-flex flex-wrap">
+                    <div class="flex-fill">
+                        <h5 class="subheader-1">Data Diri</h5>
+                        <span style="color:#2D3648" class="subheader-2">Nama Lengkap: </span>
+                        <span style="color:#2D3648">{{ user.name }}</span>
+                        <br>
+                        <span style="color:#2D3648" class="subheader-2">Tempat, Tanggal Lahir: </span>
+                        <span style="color:#2D3648">{{ user.tempat_lahir }} {{ user.tgl_lahir }}</span>
+                        <br>
+                        <span style="color:#2D3648" class="subheader-2">Jenis Kelamin: </span>
+                        <span style="color:#2D3648">{{ user.jenis_kelamin }}</span>
+                        <br>
+                        <span style="color:#2D3648" class="subheader-2">Alamat: </span>
+                        <span style="color:#2D3648">{{ user.alamat }}</span>
+                    </div>
+                    <div class="flex-fill">
+                        <h5 class="subheader-1">Kontak</h5>
+                        <span style="color:#2D3648" class="subheader-2">Email: </span>
+                        <span style="color:#2D3648">{{ user.email }}</span>
+                        <br>
+                        <span style="color:#2D3648" class="subheader-2">No Telp: </span>
+                        <span style="color:#2D3648">{{ user.no_telp }}</span>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div class="segment-card mt-3 p-4">
+                <h5 class="subheader-1">Riawayat Pekerjaan</h5>
+                <span style="color:#2D3648" class="subheader-2">{{ cv.posisi }}</span>
+                <br>
+                <span style="color:#2D3648">{{ cv.instansi }}</span>
+                <br>
+                <span style="color:#6B7280; font-size: 0.9rem;">{{ cv.lama_instansi }}</span>
+                <br>
+                <ul class="mt-3">
+                <li style="color:#2D3648">{{ cv.keterangan_posisi }}</li>
+                </ul>
+            </div>
+            <div class="segment-card mt-3 p-4">
+                <h5 class="subheader-1">Riawayat Pendidikan</h5>
+                <span style="color:#2D3648" class="subheader-2">{{ cv.asal_sekolah }}</span>
+                <br>
+                <span style="color:#2D3648">GPA: </span>
+                <span style="color:#2D3648">{{ user.ipk }}</span>
+                <br>
+                <span style="color:#6B7280; font-size: 0.9rem;">{{ user.tahun_masuk }} - {{ user.tahun_keluar }}</span>
+                <br>
+            </div>
+            <div class="segment-card mt-3 p-4">
+                <h5 class="subheader-1">Kemampuan dan Prestasi</h5>
+                <span style="color:#2D3648" class="subheader-2">Kemampuan</span>
+                <br>
+                <span style="color:#2D3648">{{ cv.kemampuan }}</span>
+                <br>
+                <br>
+                <span style="color:#2D3648" class="subheader-2">Prestasi</span>
+                <br>
+                <span style="color:#2D3648; font-size: 0.9rem;">{{ cv.prestasi }}</span>
+                <br>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

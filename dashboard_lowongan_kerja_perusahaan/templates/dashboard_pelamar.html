@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Dashboard Perusahaan</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+
+<style>
+  table tbody:nth-child(odd) {
+    background-color: #D1D5DB;
+  }
+  table tbody:nth-child(even) {
+    background-color: #ffffff;
+  }
+
+  .table thead{
+    background-color: #D1D5DB;
+
+  }
+  .table td {
+  padding: 20px;
+  }
+
+  .action{
+    display:inline-flex;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+</style>
+
+{% endblock meta %}
+
+{% block script %}
+<script src="/static/script/sidebar.js"></script>
+{% endblock script %}
+
+
+{% block content %}
+
+<div id="main">
+<div style="margin: 30px;">
+  <div class="container center">
+      <h3 style="color: #393838;"><b>{{lowongan.posisi}}</b></h3>
+
+    <div style="display:flex; gap:10px;"}>
+
+      <div class="card gh" style="background-color: #fff;">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/total.png' %}" width="25" height="25" alt="">
+          <small style="color: #0097EC;"><strong>Pelamar: {{total_pelamar}}</strong></small><br>
+        </span>
+      </div>
+
+      <div class="card gh" style="background-color: #fff">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/verif.png' %}" width="25" height="25" alt="">
+          <small style="color:green"><strong>Diterima: {{pelamar_diterima}}</strong></small><br>
+        </span>
+      </div>
+
+      <div class="card gh" style="background-color: #fff">
+        <span style="display:flex;align-items: center;">
+          <img src="{% static '/images/tolak.png' %}" width="25" height="25" alt="">
+          <small style="color:red"><strong>Ditolak: {{pelamar_ditolak}}</strong></small><br>
+        </span>
+      </div>
+    </div>
+  </div>  
+ 
+  <div style="margin: 10px;"></div>
+  <div class="text-center">
+    <br>
+    <div class="container center">
+      <div style="display:flex; gap:10px;"}>
+        <form method="get" action="{% url 'pelamar_lowongan' lowongan.id %}">
+          <button type="submit"  class="btn btn-secondary btn-sm" name="sort_by_ipk" value="true">Sort by IPK</button>
+        </form>  
+    
+        <form method="get" action="{% url 'pelamar_lowongan' lowongan.id %}">
+          <button type="submit"  class="btn btn-secondary btn-sm" name="sort_by_date" value="true">Sort by Date</button>
+        </form>  
+      </div>  
+      <table style="margin-top: 10px;" class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Pelamar</th>
+              <th scope="col">Tanggal Daftar</th>
+              <th scope="col">IPK</th>
+              <th scope="col">Status</th>
+              <th scope="col">Detail Pelamar</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          {% with data=pelamar %}
+          {% for pelamar in data %}
+          <tbody>
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{pelamar.users_id.name}}</td>
+              <td>{{pelamar.created_at}}</td>
+              <td>{{pelamar.users_id.ipk}}</td>
+              <td>{{pelamar.status}}</td>
+              <td>
+                <form action="{% url 'cv:resume' pelamar.users_id.username %}" method="GET">
+                    <button class="btn btn-read">Resume</button>
+                </form>
+              </td>
+              <td  class="action">
+                    {% if pelamar.status == 'Pending' %}
+                    <form action="{% url 'terima_pelamar' pelamar.id %}" method="GET">
+                        <button class="btn btn-outline-success " type="submit">Proses</button>
+                    </form>
+                    <form action="{% url 'tolak_pelamar' pelamar.id %}" method="GET"onsubmit="return confirm('Apakah Anda yakin mau menolak kandidat?')">
+                        <button class="btn btn-outline-danger " type="submit">Tolak</button>
+                    </form>
+                    {% else %}
+                    <button class="btn btn-outline-disabled" type="submit" >Tidak Bisa Diubah</button>
+                    {% endif %}
+       
+              </td>
+            </tr>
+          </tbody>
+          {%endfor%}
+          {% endwith %}
+        </table>
+  </div>
+    <br>
+  </div>
+</div>
+{% endblock content %}
