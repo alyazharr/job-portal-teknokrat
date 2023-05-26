@@ -81,6 +81,7 @@ body {
     font-size: 16px;
     line-height: 140%;
     color: #992637;
+    cursor: pointer;
 }
 
 .nav-link:hover {
