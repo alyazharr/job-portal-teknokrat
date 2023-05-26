@@ -102,7 +102,7 @@
           <tbody>
             <tr>
               <td>{{ forloop.counter }}</td>
-              <td>{{lowongan.posisi}}</td>
+              <td> <a href="{% url 'detail_page' lowongan.id %}"><strong>{{lowongan.posisi}}</strong></a></td>
               <td>{{lowongan.created_at}}</td>
               {% if lowongan.status == 'Buka' %}
               <td style="color:green;"><b>{{lowongan.status}}</b></td>
