@@ -26,5 +26,6 @@ urlpatterns = [
     path("list_lowongan/",views.ListLowonganView.as_view(),name='list_lowongan'),
     path("detail_lowongan/<int:pk>/", views.DetailLowonganView.as_view(),name='detail_lowongan'),
     path("dashboard-proposal-lowongan/", include("dashboard_proposal_lowongan.urls")),
+    path("notification/", include("notification.urls"))
 ]
 

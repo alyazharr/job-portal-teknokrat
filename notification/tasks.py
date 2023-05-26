@@ -28,8 +28,8 @@ def notify_job_vacancy_task(self):
     if len(open_job_vacancy) == 0:
         return
 
-    # notify all subscribed user ( for now, notify all user in the db)
-    subscribed_user = map(lambda x: x["email"], Users.objects.all().values("email"))
+    # notify all subscribed user
+    subscribed_user = map(lambda x: x["email"], Users.objects.filter(subscribed=True).values("email"))
 
     return send_mail(
         from_email="tracerstudyteknokrat@gmail.com",

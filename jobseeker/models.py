@@ -157,6 +157,7 @@ class Users(AbstractUser):
     deleted_at = models.DateTimeField(blank=True, null=True)
     role_id = models.PositiveBigIntegerField()
     prodi_id = models.PositiveBigIntegerField()
+    subscribed = models.BooleanField(default=False)
 
     last_login = None
     is_active = True
