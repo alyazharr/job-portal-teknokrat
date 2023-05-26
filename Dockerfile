@@ -30,4 +30,4 @@ CMD python manage.py makemigrations && \
     | python manage.py shell & \
       python manage.py runserver 0.0.0.0:8000 & \
       celery -A jobseeker worker --loglevel=info -P eventlet & \
-      celery -A jobseeker beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+      celery -A jobseeker beat -l INFO
