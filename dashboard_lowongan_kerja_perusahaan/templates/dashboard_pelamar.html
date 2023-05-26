@@ -113,14 +113,60 @@
                     <button class="btn btn-read">Resume</button>
                 </form>
               </td>
+              <div class="modal fade" id="prosesModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Terima Pelamar</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Setelah Anda menerima pelamar, Anda tidak bisa mengubah status dari pelamar. Apakah Anda yakin mau melanjutkan proses? </p>
+                            </div>
+                            <div class="modal-footer">
+            
+                                <form action="{% url 'terima_pelamar' pelamar.id %}" method="GET">
+                                    <button class='btn bg-base-red text-white'>Proses</button>                    
+                                </form>
+                                <button type="button" class="btn border" data-dismiss="modal" aria-label="Close">
+                                        Cancel
+                                    </button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="tolakModal">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                          <div class="modal-header">
+                              <h4 class="modal-title">Tolak Pelamar</h4>
+                          </div>
+                          <div class="modal-body">
+                              <p>Setelah Anda menolak pelamar, Anda tidak bisa mengubah status dari pelamar. Apakah anda yakin mau menolak pelamar? </p>
+                          </div>
+                          <div class="modal-footer">
+          
+                              <form action="{% url 'tolak_pelamar' pelamar.id %}" method="GET">
+                                  <button class='btn bg-base-red text-white'>Tolak</button>                    
+                              </form>
+                              <button type="button" class="btn border" data-dismiss="modal" aria-label="Close">
+                                      Cancel
+                                  </button>
+                          </div>
+                  </div>
+              </div>
+          </div>
+            
+            
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+            
               <td  class="action">
                     {% if pelamar.status == 'Pending' %}
-                    <form action="{% url 'terima_pelamar' pelamar.id %}" method="GET">
-                        <button class="btn btn-outline-success " type="submit">Proses</button>
-                    </form>
-                    <form action="{% url 'tolak_pelamar' pelamar.id %}" method="GET"onsubmit="return confirm('Apakah Anda yakin mau menolak kandidat?')">
-                        <button class="btn btn-outline-danger " type="submit">Tolak</button>
-                    </form>
+                      <button class="btn btn-outline-success "  data-toggle="modal" 
+                      data-target="#prosesModal">Proses</button>
+                      <button class="btn btn-outline-danger"  data-toggle="modal" 
+                      data-target="#tolakModal">Tolak</button>
                     {% else %}
                     <button class="btn btn-outline-disabled" type="submit" >Tidak Bisa Diubah</button>
                     {% endif %}
