@@ -105,6 +105,7 @@ INSTALLED_APPS = [
     "dashboard_lowongan_kerja_perusahaan",
     "notification",
     "django_celery_beat",
+    'svg'
 ]
 
 MIDDLEWARE = [
